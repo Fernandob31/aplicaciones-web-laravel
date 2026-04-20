@@ -17,9 +17,9 @@
 * **Gaston Llampa**
 
 ## **Entrega 20/4**
-## 1. Preparacion de repositorio con Github, junto con ramas main y dev
-## 2. Conexion con Vercel, a traves de workflows para el trabajo colaborativo sin limitacion de Vercel
-## 3. Pagina inicial con nombre inicial de la tienda y nombres de los integrantes
+1. Preparacion de repositorio con Github, junto con ramas main y dev
+2. Conexion con Vercel, a traves de workflows para el trabajo colaborativo sin limitacion de Vercel
+3. Pagina inicial con nombre inicial de la tienda y nombres de los integrantes
 
 ---
 
