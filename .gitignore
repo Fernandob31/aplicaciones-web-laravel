@@ -206,3 +206,5 @@ dist
 .vercel
 
 # End of https://www.toptal.com/developers/gitignore/api/laravel,phpunit,vercel,node
+.vercel
+.env*.local
