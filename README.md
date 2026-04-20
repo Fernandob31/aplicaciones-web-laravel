@@ -44,16 +44,16 @@ Para garantizar el rendimiento y utilizar las últimas capacidades del lenguaje,
    cd aplicaciones-web-laravel
 
 2. **Instalación de dependencias de PHP** 
-    '''bash
+   ```bash
     composer install
 3. **Configuración del Entorno (.env)**
-    '''bash
+   ```bash
     cp .env.example .env
     php artisan key:generate
 4. **Instalación de Frontend y Assets**
-    '''bash
+   ```bash
     npm install
     npm run build
 5. **Ejecucion del proyect**
-    '''bash
+   ```bash
     php artisan serve
