@@ -34,4 +34,6 @@ Para garantizar el rendimiento y utilizar las últimas capacidades del lenguaje,
 * **Frontend Tooling:** React
 * **Despliegue:** Vercel (vía GitHub Actions para integración continua)
 
+## 🛠️ Requerimientos
+
 ---
