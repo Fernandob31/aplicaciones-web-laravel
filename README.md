@@ -9,50 +9,64 @@
 
 ## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+# Boyz in the Sneaker 👟
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### **Materia:** Aplicaciones Web
+### **Integrantes:**
+* **Fernando Benitez**
+* **Gaston Llampa**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## **Entrega 20/4**
+## 1. Preparacion de repositorio con Github, junto con ramas main y dev
+## 2. Conexion con Vercel, a traves de workflows para el trabajo colaborativo sin limitacion de Vercel
+## 3. Pagina inicial con nombre inicial de la tienda y nombres de los integrantes
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 📝 Introducción del Proyecto
+El Proyecto Laravel consiste en una aplicación web desarrollada con el framework Laravel que permite la administración de productos o servicios que una empresa venderá de manera online. 
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Nuestra tienda, **Boyz in the Sneaker**, está especializada en la comercialización de calzado. Este sistema web es de **uso exclusivo para el personal de la empresa**, funcionando como un panel administrativo robusto (Back-office) donde los empleados pueden gestionar el ciclo de vida de los productos.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## 🛠️ Especificaciones Técnicas
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Para garantizar el rendimiento y utilizar las últimas capacidades del lenguaje, el proyecto se ha desarrollado bajo el siguiente stack:
 
-```bash
-composer require laravel/boost --dev
+* **Framework:** Laravel 13.x
+* **Motor de Lenguaje:** PHP 8.5.5 (Ambiente de vanguardia)
+* **Gestor de Dependencias:** Composer
+* **Frontend Tooling:** React
+* **Despliegue:** Vercel (vía GitHub Actions para integración continua)
 
-php artisan boost:install
-```
+### ⚠️ Nota sobre la versión de PHP
+El proyecto utiliza **PHP 8.5.5**. Se ha configurado de esta manera para aprovechar las mejoras en el motor de reflexión y el manejo de propiedades virtuales. Para correr el proyecto de forma local, asegúrese de tener habilitadas las siguientes extensiones en su `php.ini`:
+* `pdo_mysql`
+* `fileinfo`
+* `mbstring`
+* `openssl`
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 🚀 Instalación Local
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. **Clonar el repositorio:**
+   ```bash
+   git clone [URL-DEL-REPO]
+   cd aplicaciones-web-laravel
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+2. **Instalación de dependencias de PHP** 
+    '''bash
+    composer install
+3. **Configuración del Entorno (.env)**
+    '''bash
+    cp .env.example .env
+    php artisan key:generate
+4. **Instalación de Frontend y Assets**
+    '''bash
+    npm install
+    npm run build
+5. **Ejecucion del proyect**
+    '''bash
+    php artisan serve
