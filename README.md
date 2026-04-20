@@ -1,20 +1,12 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
-
-## About Laravel
-
 # Boyz in the Sneaker 👟
 
 ### **Materia:** Aplicaciones Web
 ### **Integrantes:**
 * **Fernando Benitez**
 * **Gaston Llampa**
+---
 
 * **Link del proyecto:** https://aplicaciones-web-laravel-95bplylzg-fbt-eam.vercel.app/
 
@@ -41,13 +33,6 @@ Para garantizar el rendimiento y utilizar las últimas capacidades del lenguaje,
 * **Gestor de Dependencias:** Composer
 * **Frontend Tooling:** React
 * **Despliegue:** Vercel (vía GitHub Actions para integración continua)
-
-### ⚠️ Nota sobre la versión de PHP
-El proyecto utiliza **PHP 8.5.5**. Se ha configurado de esta manera para aprovechar las mejoras en el motor de reflexión y el manejo de propiedades virtuales. Para correr el proyecto de forma local, asegúrese de tener habilitadas las siguientes extensiones en su `php.ini`:
-* `pdo_mysql`
-* `fileinfo`
-* `mbstring`
-* `openssl`
 
 ---
 
