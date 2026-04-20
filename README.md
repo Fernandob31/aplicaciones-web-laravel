@@ -16,6 +16,8 @@
 * **Fernando Benitez**
 * **Gaston Llampa**
 
+* **Link del proyecto:** https://aplicaciones-web-laravel-95bplylzg-fbt-eam.vercel.app/
+
 ## **Entrega 20/4**
 1. Preparacion de repositorio con Github, junto con ramas main y dev
 2. Conexion con Vercel, a traves de workflows para el trabajo colaborativo sin limitacion de Vercel
