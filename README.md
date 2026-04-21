@@ -36,7 +36,7 @@ Para garantizar el rendimiento y utilizar las últimas capacidades del lenguaje,
 
 ## 📋 Requerimientos Funcionales
 
-Los siguientes requerimientos describen las funcionalidades principales que el sistema debe cumplir para la gestión de una tienda online de zapatillas.
+Los siguientes requerimientos describen las funcionalidades principales que el sistema cumplira para la gestión de una tienda online de zapatillas.
 
 ### **👤 Gestión de usuarios:**
 * **El administrador podra agregar nuevos productos, editar productos existentes y eliminar de manera logica productos**
