@@ -34,6 +34,16 @@ Para garantizar el rendimiento y utilizar las últimas capacidades del lenguaje,
 * **Frontend Tooling:** React
 * **Despliegue:** Vercel (vía GitHub Actions para integración continua)
 
-## 🛠️ Requerimientos
+## 📋 Requerimientos Funcionales
 
----
+Los siguientes requerimientos describen las funcionalidades principales que el sistema debe cumplir para la gestión de una tienda online de zapatillas.
+
+### **👤 Gestión de usuarios:**
+* **El administrador podra agregar nuevos productos, editar productos existentes y eliminar de manera logica productos**
+* **El usuario cliente podrá iniciar sesión**
+### **🛍️ Gestión de productos:**
+* **Mostrar catalogo de zapatillas disponibles, se visualizara el detalle de cada producto, permitira listar productos por categoria**
+### **🛒 Carrito de compras:**
+* **El usuario cliente podra agregar y eliminar productos del carrito, ademas de poder visalizar el resumen de su compra**
+### **💳 Proceso de compra:**
+* **El usuario cliente podra confirmar la compra de los productos seleccionados, el sistema calclara el total de la compra y se mostrara**
