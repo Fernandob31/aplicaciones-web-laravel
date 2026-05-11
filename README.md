@@ -8,7 +8,7 @@
 * **Gaston Llampa**
 ---
 
-* **Link del proyecto:** https://aplicaciones-web-laravel-fernandob31-fbt-eam.vercel.app/
+* **Link del proyecto:** [https://boyz-in-the-sneaker-laravel.vercel.app/](https://boyz-in-the-sneaker-laravel.vercel.app/)
 
 ## **Entrega 20/4**
 1. Preparacion de repositorio con Github, junto con ramas main y dev
