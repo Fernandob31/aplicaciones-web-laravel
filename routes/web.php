@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ProductoController;
 
 // Rutas de invitado (para loguearse)
 Route::middleware('guest')->group(function () {
@@ -10,7 +12,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::get('/', function () {
-    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    return redirect('/login');
 });
 
 // Rutas protegidas (solo para usuarios que ya iniciaron sesión)
@@ -23,39 +25,21 @@ Route::get('/dashboard', function () {
     })->name('dashboard');
 });
 
-use Illuminate\Http\Request;
-use Cloudinary\Cloudinary;
+Route::get('/categorias', [CategoriaController::class, 'index']);
 
-// 1. Ruta para mostrar un formulario HTML básico
-Route::get('/test-cloudinary', function () {
-    return '
-        <h2>Prueba de Cloudinary</h2>
-        <form action="/test-cloudinary" method="POST" enctype="multipart/form-data">
-            '.csrf_field().'
-            <input type="file" name="imagen" accept="image/*" required>
-            <br><br>
-            <button type="submit">Subir Imagen</button>
-        </form>
-    ';
-});
+Route::get('/categorias/create', [CategoriaController::class, 'create']);
+Route::post('/categorias', [CategoriaController::class, 'store']);
 
-// 2. Ruta para procesar la subida
-Route::post('/test-cloudinary', function (Request $request) {
-    try {
-        // Inicializamos Cloudinary con tu variable de entorno
-        $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
+Route::get('/categorias/{id}/edit', [CategoriaController::class, 'edit']);
+Route::put('/categorias/{id}', [CategoriaController::class, 'update']);
 
-        // Subimos el archivo a una carpeta llamada "pruebas"
-        $resultado = $cloudinary->uploadApi()->upload(
-            $request->file('imagen')->getRealPath(),
-            ['folder' => 'pruebas']
-        );
+Route::delete('/categorias/{id}', [CategoriaController::class, 'destroy']);
 
-        // Si todo sale bien, mostramos el link de la imagen subida
-        $url = $resultado['secure_url'];
-        return "¡Subida exitosa! <br><br> Puedes ver tu imagen aquí: <a href='{$url}' target='_blank'>{$url}</a>";
+Route::get('/productos', [ProductoController::class, 'index']);
+Route::get('/productos/create', [ProductoController::class, 'create']);
+Route::post('/productos', [ProductoController::class, 'store']);
 
-    } catch (\Exception $e) {
-        return "Hubo un error al subir: " . $e->getMessage();
-    }
-});
+Route::get('/productos/{id}/edit', [ProductoController::class, 'edit']);
+Route::put('/productos/{id}', [ProductoController::class, 'update']);
+
+Route::delete('/productos/{id}', [ProductoController::class, 'destroy']);

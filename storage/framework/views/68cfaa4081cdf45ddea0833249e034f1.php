@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('titulo', 'Panel de Administración') - Boyz in the Sneaker</title>
-    @vite(['resources/css/app.css'])
+    <title><?php echo $__env->yieldContent('titulo', 'Panel de Administración'); ?> - Boyz in the Sneaker</title>
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css']); ?>
 </head>
 <body class="bg-[#0a0a0a] text-white font-sans antialiased flex h-screen overflow-hidden">
 
@@ -14,7 +14,7 @@
         </div>
         
         <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <a href="{{ route('dashboard') }}" class="block px-4 py-2 rounded-md bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30 transition">
+            <a href="<?php echo e(route('dashboard')); ?>" class="block px-4 py-2 rounded-md bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30 transition">
                 Dashboard
             </a>
             <a href="/productos" class="block px-4 py-2 rounded-md hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 transition">
@@ -33,16 +33,16 @@
         
         <header class="h-16 bg-[#121212] border-b border-[#25a5be]/20 flex items-center justify-between px-6 shadow-md z-0">
             <h2 class="text-lg font-semibold text-gray-200">
-                @yield('titulo', 'Dashboard')
+                <?php echo $__env->yieldContent('titulo', 'Dashboard'); ?>
             </h2>
             
             <div class="flex items-center space-x-4">
                 <span class="text-sm text-gray-400">
-                    Hola, <span class="text-[#25a5be]">{{ auth()->user()->username }}</span> ({{ auth()->user()->rol }})
+                    Hola, <span class="text-[#25a5be]"><?php echo e(auth()->user()->username); ?></span> (<?php echo e(auth()->user()->rol); ?>)
                 </span>
                 
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
+                <form method="POST" action="<?php echo e(route('logout')); ?>">
+                    <?php echo csrf_field(); ?>
                     <button type="submit" class="text-sm px-3 py-1.5 bg-red-500/10 text-red-400 rounded-md hover:bg-red-500/20 border border-red-500/30 transition">
                         Cerrar Sesión
                     </button>
@@ -51,10 +51,10 @@
         </header>
 
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gradient-to-br from-[#0a0a0a] to-[#121212] p-8">
-            @yield('contenido')
+            <?php echo $__env->yieldContent('contenido'); ?>
         </main>
 
     </div>
 
 </body>
-</html>
+</html><?php /**PATH C:\Users\USUARIO\Desktop\Aplicaciones Web\Boyz in the Sneaker\aplicaciones-web-laravel\resources\views/layouts/admin.blade.php ENDPATH**/ ?>
