@@ -93,6 +93,12 @@
                                 Eliminar
                             </button>
                         </form>
+                        <a 
+                            href="/productos/{{ $producto->id }}"
+                            class="px-3 py-1 bg-[#25a5be]/10 text-[#25a5be] rounded border border-[#25a5be]/30 hover:bg-[#25a5be]/20 transition"
+                        >
+                            Ver Detalles
+                        </a>
                     </td>
                 </tr>
 

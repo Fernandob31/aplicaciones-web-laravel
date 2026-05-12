@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\DashboardController;
 
 // Rutas de invitado (para loguearse)
 Route::middleware('guest')->group(function () {
@@ -18,11 +19,7 @@ Route::get('/', function () {
 // Rutas protegidas (solo para usuarios que ya iniciaron sesión)
 Route::middleware('auth')->group(function () {
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    
-// Cambiamos el retorno de texto por la vista que creaste
-Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 Route::get('/categorias', [CategoriaController::class, 'index']);
@@ -38,6 +35,7 @@ Route::delete('/categorias/{id}', [CategoriaController::class, 'destroy']);
 Route::get('/productos', [ProductoController::class, 'index']);
 Route::get('/productos/create', [ProductoController::class, 'create']);
 Route::post('/productos', [ProductoController::class, 'store']);
+Route::get('/productos/{id}', [ProductoController::class, 'show'])->name('productos.show');
 
 Route::get('/productos/{id}/edit', [ProductoController::class, 'edit']);
 Route::put('/productos/{id}', [ProductoController::class, 'update']);

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Producto;
 use App\Models\ProductoTalle;
 use App\Models\Categoria;
+use App\Models\ImagenProducto;
+use Cloudinary\Cloudinary;
 
 class ProductoController extends Controller
 {
@@ -22,6 +24,17 @@ class ProductoController extends Controller
 
     public function store(Request $request) {
         // crea el producto
+        $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
+
+        $urlPrincipal = null;
+        if ($request->hasFile('imagen_principal')) {
+            $upload = $cloudinary->uploadApi()->upload(
+                $request->file('imagen_principal')->getRealPath(),
+                ['folder' => 'sneakers/principal']
+            );
+            $urlPrincipal = $upload['secure_url'];
+        }
+
         $producto = Producto::create([
             'categoria_id' => $request->categoria_id,
             'modelo' => $request->modelo,
@@ -30,7 +43,7 @@ class ProductoController extends Controller
             'colores' => explode(',', $request->colores),
             'genero' => $request->genero,
             'descripcion' => $request->descripcion,
-            'imagen' => null,
+            'imagen' => $urlPrincipal,
             'resena' => 0
         ]);
         // crea los talles
@@ -40,6 +53,20 @@ class ProductoController extends Controller
                     'producto_id' => $producto->id,
                     'talle' => $talle,
                     'stock' => $request->stocks[$index]
+                ]);
+            }
+        }
+        // 4. Subir la galería de imágenes
+        if ($request->hasFile('galeria')) {
+            foreach ($request->file('galeria') as $img) {
+                $uploadGaleria = $cloudinary->uploadApi()->upload(
+                    $img->getRealPath(),
+                    ['folder' => 'sneakers/galeria']
+                );
+                
+                ImagenProducto::create([
+                    'producto_id' => $producto->id,
+                    'url_imagen' => $uploadGaleria['secure_url']
                 ]);
             }
         }
@@ -58,7 +85,8 @@ class ProductoController extends Controller
     // delete + create
     public function update(Request $request, $id) {
         $producto = Producto::findOrFail($id);
-        $producto->update([
+        $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
+        $datosActualizar = [
             'categoria_id' => $request->categoria_id,
             'modelo' => $request->modelo,
             'marca' => $request->marca,
@@ -66,7 +94,18 @@ class ProductoController extends Controller
             'colores' => explode(',', $request->colores),
             'genero' => $request->genero,
             'descripcion' => $request->descripcion
-        ]);
+        ];
+        // Si la imagen principal cambio, se actualiza
+        if ($request->hasFile('imagen_principal')) {
+            $upload = $cloudinary->uploadApi()->upload(
+                $request->file('imagen_principal')->getRealPath(),
+                ['folder' => 'sneakers/principal']
+            );
+            $datosActualizar['imagen'] = $upload['secure_url'];
+        }
+
+        $producto->update($datosActualizar);
+        
         // Borra talles viejos
         $producto->talles()->delete();
         // Crea talles nuevos
@@ -79,6 +118,20 @@ class ProductoController extends Controller
                 ]);
             }
         }
+        // Si se agregaron nuevas imagenes a la galeria, se actualiza
+        if ($request->hasFile('galeria')) {
+            foreach ($request->file('galeria') as $img) {
+                $uploadGaleria = $cloudinary->uploadApi()->upload(
+                    $img->getRealPath(),
+                    ['folder' => 'sneakers/galeria']
+                );
+                
+                ImagenProducto::create([
+                    'producto_id' => $producto->id,
+                    'url_imagen' => $uploadGaleria['secure_url']
+                ]);
+            }
+        }
         return redirect('/productos');
     }
 
@@ -87,5 +140,11 @@ class ProductoController extends Controller
         $producto->delete();
 
         return redirect('/productos');
+    }
+
+    public function show($id) {
+        // Cargamos el producto con sus relaciones para que no falte nada
+        $producto = Producto::with(['categoria', 'talles', 'imagenes'])->findOrFail($id);
+        return view('productos.show', compact('producto'));
     }
 }

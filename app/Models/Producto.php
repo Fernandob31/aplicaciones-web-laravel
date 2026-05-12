@@ -33,4 +33,8 @@ class Producto extends Model
     {
         return $this->hasMany(ProductoTalle::class);
     }
+    public function imagenes()
+    {
+        return $this->hasMany(ImagenProducto::class);
+    }
 }
