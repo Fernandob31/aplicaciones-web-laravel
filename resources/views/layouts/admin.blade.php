@@ -14,16 +14,23 @@
         </div>
         
         <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <a href="{{ route('dashboard') }}" class="block px-4 py-2 rounded-md bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30 transition">
+            <a href="{{ route('dashboard') }}" 
+               class="block px-4 py-2 rounded-md transition {{ request()->routeIs('dashboard') ? 'bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30' : 'hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent' }}">
                 Dashboard
             </a>
-            <a href="/productos" class="block px-4 py-2 rounded-md hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 transition">
+            
+            <a href="/productos" 
+               class="block px-4 py-2 rounded-md transition {{ request()->is('productos*') ? 'bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30' : 'hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent' }}">
                 Productos
             </a>
-            <a href="/categorias" class="block px-4 py-2 rounded-md hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 transition">
+            
+            <a href="/categorias" 
+               class="block px-4 py-2 rounded-md transition {{ request()->is('categorias*') ? 'bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30' : 'hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent' }}">
                 Categorías
             </a>
-            <a href="#" class="block px-4 py-2 rounded-md hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 transition">
+            
+            <a href="#" 
+               class="block px-4 py-2 rounded-md transition hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent">
                 Gestión de Usuarios
             </a>
         </nav>
