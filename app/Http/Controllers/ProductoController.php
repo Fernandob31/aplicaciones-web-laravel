@@ -188,7 +188,7 @@ class ProductoController extends Controller
                 ]);
             }
         }
-        return redirect('/productos');
+        return redirect('/productos/' . $producto->id)->with('success', 'Producto actualizado correctamente');
     }
 
     public function destroy($id) {
