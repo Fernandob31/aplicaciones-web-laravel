@@ -23,9 +23,33 @@ class ProductoController extends Controller
     }
 
     public function store(Request $request) {
+        $mensajes = [
+            'required' => 'Este campo es obligatorio.',
+            'numeric'  => 'Debe ser un número válido.',
+            'min'      => 'El valor mínimo es :min.',
+            'image'    => 'El archivo debe ser una imagen.',
+            'mimes'    => 'La imagen debe ser jpeg, png, jpg o webp.',
+            'max'      => 'El archivo no debe pesar más de 2MB.',
+            'exists'   => 'La opción seleccionada no es válida.'
+        ];
+        $request->validate([
+            'categoria_id'     => 'required|exists:categorias,id',
+            'modelo'           => 'required|string|max:255',
+            'marca'            => 'required|string|max:255',
+            'precio'           => 'required|numeric|min:0',
+            'colores'          => 'required|string',
+            'genero'           => 'required|string',
+            'descripcion'      => 'required|string',
+            'imagen_principal' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'talles'           => 'nullable|array',
+            'talles.*'         => 'nullable|string',
+            'stocks'           => 'nullable|array',
+            'stocks.*'         => 'nullable|numeric|min:0',
+            'galeria'          => 'nullable|array',
+            'galeria.*'        => 'image|mimes:jpeg,png,jpg,webp|max:2048'
+        ], $mensajes);
         // crea el producto
         $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
-
         $urlPrincipal = null;
         if ($request->hasFile('imagen_principal')) {
             $upload = $cloudinary->uploadApi()->upload(
@@ -47,13 +71,15 @@ class ProductoController extends Controller
             'resena' => 0
         ]);
         // crea los talles
-        foreach ($request->talles as $index => $talle) {
-            if ($talle) {
-                ProductoTalle::create([
-                    'producto_id' => $producto->id,
-                    'talle' => $talle,
-                    'stock' => $request->stocks[$index]
-                ]);
+        if ($request->has('talles') && is_array($request->talles)) {
+            foreach ($request->talles as $index => $talle) {
+                if ($talle) {
+                    ProductoTalle::create([
+                        'producto_id' => $producto->id,
+                        'talle' => $talle,
+                        'stock' => $request->stocks[$index]
+                    ]);
+                }
             }
         }
         // 4. Subir la galería de imágenes
@@ -70,7 +96,7 @@ class ProductoController extends Controller
                 ]);
             }
         }
-        return redirect('/productos');
+        return redirect('/productos')->with('success', 'Producto creado exitosamente');
     }
     
     public function edit($id) {
@@ -84,6 +110,35 @@ class ProductoController extends Controller
     }
     // delete + create
     public function update(Request $request, $id) {
+        $mensajes = [
+            'required' => 'Este campo es obligatorio.',
+            'numeric'  => 'Debe ser un número válido.',
+            'min'      => 'El valor mínimo es :min.',
+            'image'    => 'El archivo debe ser una imagen.',
+            'mimes'    => 'La imagen debe ser jpeg, png, jpg o webp.',
+            'max'      => 'El archivo no debe pesar más de 2MB.',
+            'exists'   => 'La opción seleccionada no es válida.'
+        ];
+
+        // Validacion
+        $request->validate([
+            'categoria_id'     => 'required|exists:categorias,id',
+            'modelo'           => 'required|string|max:255',
+            'marca'            => 'required|string|max:255',
+            'precio'           => 'required|numeric|min:0',
+            'colores'          => 'required|string',
+            'genero'           => 'required|string',
+            'descripcion'      => 'required|string',
+            'imagen_principal' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'talles'           => 'nullable|array',
+            'talles.*'         => 'nullable|string',
+            'stocks'           => 'nullable|array',
+            'stocks.*'         => 'nullable|numeric|min:0',
+            'galeria'          => 'nullable|array',
+            'galeria.*'        => 'image|mimes:jpeg,png,jpg,webp|max:2048'
+        ], $mensajes);
+
+
         $producto = Producto::findOrFail($id);
         $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
         $datosActualizar = [
@@ -105,17 +160,18 @@ class ProductoController extends Controller
         }
 
         $producto->update($datosActualizar);
-        
-        // Borra talles viejos
-        $producto->talles()->delete();
-        // Crea talles nuevos
-        foreach ($request->talles as $index => $talle) {
-            if ($talle) {
-                ProductoTalle::create([
-                    'producto_id' => $producto->id,
-                    'talle' => $talle,
-                    'stock' => $request->stocks[$index]
-                ]);
+
+        // Si se agregaron nuevos talles, se actualiza
+        if ($request->has('talles') && is_array($request->talles)) {
+            $producto->talles()->delete();
+            foreach ($request->talles as $index => $talle) {
+                if ($talle) {
+                    ProductoTalle::create([
+                        'producto_id' => $producto->id,
+                        'talle' => $talle,
+                        'stock' => $request->stocks[$index]
+                    ]);
+                }
             }
         }
         // Si se agregaron nuevas imagenes a la galeria, se actualiza
