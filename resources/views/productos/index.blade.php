@@ -83,13 +83,11 @@
                             class="px-3 py-1 bg-yellow-500/10 text-yellow-400 rounded border border-yellow-500/30 hover:bg-yellow-500/20 transition">
                             Editar
                         </a>
-                        <form action="/productos/{{ $producto->id }}" method="POST">
+                        <form action="/productos/{{ $producto->id }}" method="POST" class="form-eliminar">
                             @csrf
                             @method('DELETE')
-                            <button 
-                                type="submit"
-                                class="px-3 py-1 bg-red-500/10 text-red-400 rounded border border-red-500/30 hover:bg-red-500/20 transition"
-                            >
+                            
+                            <button type="submit" class="px-4 py-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-colors border border-red-500/30">
                                 Eliminar
                             </button>
                         </form>
@@ -121,5 +119,33 @@
     </table>
 
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const formularios = document.querySelectorAll('.form-eliminar');
 
+        formularios.forEach(formulario => {
+            formulario.addEventListener('submit', function (e) {
+                e.preventDefault(); // Pausa el envío del formulario
+
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Esta acción borrará el producto de forma permanente.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#f41e1e', // Color rojo (Tailwind red-500)
+                    cancelButtonColor: '#303640',  // Color gris (Tailwind gray-700)
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar',
+                    background: '#121212', // Fondo oscuro acorde a tu diseño
+                    color: '#ffffff'       // Texto blanco
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.submit();
+                    }
+                });
+            });
+        });
+    });
+    //Agregar Swal.mixin para avisos -linea de recordatorio-
+</script>
 @endsection
