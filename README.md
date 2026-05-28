@@ -34,16 +34,26 @@ Para garantizar el rendimiento y utilizar las últimas capacidades del lenguaje,
 * **Frontend Tooling:** React
 * **Despliegue:** Vercel (vía GitHub Actions para integración continua)
 
-## 📋 Requerimientos Funcionales
+---
 
-Los siguientes requerimientos describen las funcionalidades principales que el sistema cumplira para la gestión de una tienda online de zapatillas.
+## 🚀 Instalación Local
 
-### **👤 Gestión de usuarios:**
-* **El administrador podra agregar nuevos productos, editar productos existentes y eliminar de manera logica productos**
-* **El usuario cliente podrá iniciar sesión**
-### **🛍️ Gestión de productos:**
-* **Mostrar catalogo de zapatillas disponibles, se visualizara el detalle de cada producto, permitira listar productos por categoria**
-### **🛒 Carrito de compras:**
-* **El usuario cliente podra agregar y eliminar productos del carrito, ademas de poder visalizar el resumen de su compra**
-### **💳 Proceso de compra:**
-* **El usuario cliente podra confirmar la compra de los productos seleccionados, el sistema calclara el total de la compra y se mostrara**
+1. **Clonar el repositorio:**
+   ```bash
+   git clone [URL-DEL-REPO]
+   cd aplicaciones-web-laravel
+
+2. **Instalación de dependencias de PHP** 
+   ```bash
+    composer install
+3. **Configuración del Entorno (.env)**
+   ```bash
+    cp .env.example .env
+    php artisan key:generate
+4. **Instalación de Frontend y Assets**
+   ```bash
+    npm install
+    npm run build
+5. **Ejecucion del proyect**
+   ```bash
+    php artisan serve
