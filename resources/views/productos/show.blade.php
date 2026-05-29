@@ -44,19 +44,24 @@
                     </div>
                 </div>
 
-                <div>
-                    <h3 class="text-gray-400 text-xs uppercase tracking-widest mb-3">Colores Disponibles</h3>
-                    <div class="flex flex-wrap gap-2">
-                        @php 
-                            // Aseguramos que colores sea un array por si viene como string
-                            $colores = is_array($producto->colores) ? $producto->colores : explode(',', $producto->colores);
-                        @endphp
-                        @foreach($colores as $color)
-                            <span class="px-4 py-2 bg-gray-800/50 border border-gray-700 text-gray-200 rounded-lg text-sm font-medium">
-                                {{ trim($color) }}
+            <div class="mt-4">
+                <h3 class="text-sm font-semibold text-gray-400 mb-2">Colores Disponibles:</h3>
+                
+                <div class="flex flex-wrap gap-3">
+                    @foreach($producto->colores as $color)
+                        <div class="flex items-center gap-2 bg-[#1a1a1a] px-3 py-1.5 rounded-full border border-gray-700 shadow-sm">
+                            
+                            <span 
+                                class="w-4 h-4 rounded-full border border-gray-500/50" 
+                                style="background-color: {{ $color }};"
+                            ></span>
+                            
+                            <span class="text-sm text-gray-300 font-mono">
+                                {{ strtoupper($color) }}
                             </span>
-                        @endforeach
-                    </div>
+                            
+                        </div>
+                    @endforeach
                 </div>
 
                 <div>
@@ -99,3 +104,29 @@
     </div>
 </div>
 @endsection
+@if(session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000, // Desaparece a los 3 segundos
+                timerProgressBar: true,
+                background: '#1a1a1a', // Fondo oscuro del panel
+                color: '#ffffff',      // Texto blanco
+                iconColor: '#25a5be',  // Color de acento
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+
+            // Disparamos el cartel usando el mensaje que mandó el Controlador
+            Toast.fire({
+                icon: 'success',
+                title: '{{ session('success') }}'
+            });
+        });
+    </script>
+@endif

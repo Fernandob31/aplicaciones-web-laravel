@@ -12,9 +12,32 @@ use Cloudinary\Cloudinary;
 
 class ProductoController extends Controller
 {
-    public function index() {
-        $productos = Producto::with(['categoria', 'talles'])->get();
-        return view('productos.index', compact('productos'));
+    public function index(Request $request) {
+        $query = Producto::with('talles', 'categoria');
+
+        if ($request->filled('buscar')) {
+            $buscar = mb_strtolower($request->buscar, 'UTF-8');
+            $query->where(function ($query) use ($buscar) {
+                $query->whereRaw('LOWER(marca) LIKE ?', ["%{$buscar}%"])
+                    ->orWhereRaw('LOWER(modelo) LIKE ?', ["%{$buscar}%"]);
+            });
+        }
+        
+        if ($request->filled('categoria_id')) {
+            $query->where('categoria_id', $request->categoria_id);
+        }
+        if ($request->filled('genero')){
+            $query->where('genero', $request->genero);
+        }
+
+        $productos = $query->latest()->paginate(10);
+        $categorias = Categoria::all();
+
+        if ($request->ajax()) {
+            return view('productos.partials.tabla', compact('productos'))->render();
+        }
+
+        return view('productos.index', compact('productos', 'categorias'));
     }
 
     public function create() {
@@ -195,7 +218,14 @@ class ProductoController extends Controller
         $producto = Producto::findOrFail($id);
         $producto->delete();
 
-        return redirect('/productos');
+        if (request()->ajax()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Producto eliminado correctamente'
+            ]);
+        }
+
+        return redirect('/productos')->with('success', 'Producto eliminado');
     }
 
     public function show($id) {
