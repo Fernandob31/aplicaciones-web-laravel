@@ -144,25 +144,51 @@ class ProductoController extends Controller
         ];
 
         // Validacion
-        $request->validate([
-            'categoria_id'     => 'required|exists:categorias,id',
-            'modelo'           => 'required|string|max:255',
-            'marca'            => 'required|string|max:255',
-            'precio'           => 'required|numeric|min:0',
-            'colores'          => 'required|string',
-            'genero'           => 'required|string',
-            'descripcion'      => 'required|string',
-            'imagen_principal' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'talles'           => 'nullable|array',
-            'talles.*'         => 'nullable|string',
-            'stocks'           => 'nullable|array',
-            'stocks.*'         => 'nullable|numeric|min:0',
-            'galeria'          => 'nullable|array',
-            'galeria.*'        => 'image|mimes:jpeg,png,jpg,webp|max:2048'
-        ], $mensajes);
-
+        if (auth()->user()->rol == 'gestor_stock') {
+            $request->validate([
+                'talles'           => 'nullable|array',
+                'talles.*'         => 'nullable|string',
+                'stocks'           => 'nullable|array',
+                'stocks.*'         => 'nullable|numeric|min:0'
+            ], $mensajes);
+        } else {
+            $request->validate([
+                'categoria_id'     => 'required|exists:categorias,id',
+                'modelo'           => 'required|string|max:255',
+                'marca'            => 'required|string|max:255',
+                'precio'           => 'required|numeric|min:0',
+                'colores'          => 'required|string',
+                'genero'           => 'required|string',
+                'descripcion'      => 'required|string',
+                'imagen_principal' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+                'talles'           => 'nullable|array',
+                'talles.*'         => 'nullable|string',
+                'stocks'           => 'nullable|array',
+                'stocks.*'         => 'nullable|numeric|min:0',
+                'galeria'          => 'nullable|array',
+                'galeria.*'        => 'image|mimes:jpeg,png,jpg,webp|max:2048'
+            ], $mensajes);
+        }
 
         $producto = Producto::findOrFail($id);
+        if (auth()->user()->rol == 'gestor_stock') {
+            // Solo actualiza talles y stock
+            $producto->talles()->delete();
+            if ($request->has('talles') && is_array($request->talles)) {
+                foreach ($request->talles as $index => $talle) {
+                    if ($talle) {
+                        ProductoTalle::create([
+                            'producto_id' => $producto->id,
+                            'talle' => $talle,
+                            'stock' => $request->stocks[$index]
+                        ]);
+                    }
+                }
+            }
+            return redirect('/productos/' . $producto->id)
+                ->with('success', 'Stock actualizado correctamente');
+        }
+
         $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
         $datosActualizar = [
             'categoria_id' => $request->categoria_id,
