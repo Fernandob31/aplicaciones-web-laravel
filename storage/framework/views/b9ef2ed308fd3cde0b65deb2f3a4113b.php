@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('titulo', 'Productos'); ?>
 
 <?php $__env->startSection('contenido'); ?>
@@ -90,16 +88,20 @@
                             class="px-3 py-1 bg-yellow-500/10 text-yellow-400 rounded border border-yellow-500/30 hover:bg-yellow-500/20 transition">
                             Editar
                         </a>
-                        <form action="/productos/<?php echo e($producto->id); ?>" method="POST">
+                        <form action="/productos/<?php echo e($producto->id); ?>" method="POST" class="form-eliminar">
                             <?php echo csrf_field(); ?>
                             <?php echo method_field('DELETE'); ?>
-                            <button 
-                                type="submit"
-                                class="px-3 py-1 bg-red-500/10 text-red-400 rounded border border-red-500/30 hover:bg-red-500/20 transition"
-                            >
+                            
+                            <button type="submit" class="px-4 py-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-colors border border-red-500/30">
                                 Eliminar
                             </button>
                         </form>
+                        <a 
+                            href="/productos/<?php echo e($producto->id); ?>"
+                            class="px-3 py-1 bg-[#25a5be]/10 text-[#25a5be] rounded border border-[#25a5be]/30 hover:bg-[#25a5be]/20 transition"
+                        >
+                            Ver Detalles
+                        </a>
                     </td>
                 </tr>
 
@@ -122,6 +124,34 @@
     </table>
 
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const formularios = document.querySelectorAll('.form-eliminar');
 
+        formularios.forEach(formulario => {
+            formulario.addEventListener('submit', function (e) {
+                e.preventDefault(); // Pausa el envío del formulario
+
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Esta acción borrará el producto de forma permanente.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#f41e1e', // Color rojo (Tailwind red-500)
+                    cancelButtonColor: '#303640',  // Color gris (Tailwind gray-700)
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar',
+                    background: '#121212', // Fondo oscuro acorde a tu diseño
+                    color: '#ffffff'       // Texto blanco
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.submit();
+                    }
+                });
+            });
+        });
+    });
+    //Agregar Swal.mixin para avisos -linea de recordatorio-
+</script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\USUARIO\Desktop\Aplicaciones Web\Boyz in the Sneaker\aplicaciones-web-laravel\resources\views/productos/index.blade.php ENDPATH**/ ?>

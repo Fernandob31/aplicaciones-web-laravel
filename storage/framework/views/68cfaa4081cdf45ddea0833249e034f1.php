@@ -14,18 +14,29 @@
         </div>
         
         <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <a href="<?php echo e(route('dashboard')); ?>" class="block px-4 py-2 rounded-md bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30 transition">
+            <a href="<?php echo e(route('dashboard')); ?>" 
+               class="block px-4 py-2 rounded-md transition <?php echo e(request()->routeIs('dashboard') ? 'bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30' : 'hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent'); ?>">
                 Dashboard
             </a>
-            <a href="/productos" class="block px-4 py-2 rounded-md hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 transition">
+            
+            <a href="/productos" 
+               class="block px-4 py-2 rounded-md transition <?php echo e(request()->is('productos*') ? 'bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30' : 'hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent'); ?>">
                 Productos
             </a>
-            <a href="/categorias" class="block px-4 py-2 rounded-md hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 transition">
-                Categorías
-            </a>
-            <a href="#" class="block px-4 py-2 rounded-md hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 transition">
-                Gestión de Usuarios
-            </a>
+            
+            <?php if(auth()->user()->rol == 'admin' || auth()->user()->rol == 'gestor_productos'): ?> 
+                <a href="/categorias" 
+                class="block px-4 py-2 rounded-md transition <?php echo e(request()->is('categorias*') ? 'bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30' : 'hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent'); ?>">
+                    Categorías
+                </a>
+            <?php endif; ?>
+            
+            <?php if(auth()->user()->rol == 'admin'): ?>
+                <a href="/usuarios" 
+                class="block px-4 py-2 rounded-md transition hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent">
+                    Gestión de Usuarios
+                </a>
+            <?php endif; ?>
         </nav>
     </aside>
 
@@ -38,7 +49,7 @@
             
             <div class="flex items-center space-x-4">
                 <span class="text-sm text-gray-400">
-                    Hola, <span class="text-[#25a5be]"><?php echo e(auth()->user()->username); ?></span> (<?php echo e(auth()->user()->rol); ?>)
+                    Hola, <span class="text-[#25a5be]"><?php echo e(auth()->user()->username); ?></span> (<?php echo e(auth()->user()->rol_nombre); ?>)
                 </span>
                 
                 <form method="POST" action="<?php echo e(route('logout')); ?>">
@@ -55,6 +66,6 @@
         </main>
 
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html><?php /**PATH C:\Users\USUARIO\Desktop\Aplicaciones Web\Boyz in the Sneaker\aplicaciones-web-laravel\resources\views/layouts/admin.blade.php ENDPATH**/ ?>

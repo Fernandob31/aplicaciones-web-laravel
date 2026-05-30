@@ -33,6 +33,9 @@
                         name="modelo"
                         value="{{ old('modelo', $producto->modelo) }}"
                         class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white @error('modelo') border-red-500 @enderror"
+                        @if(auth()->user()->rol == 'gestor_stock')
+                            readonly
+                        @endif
                     >
                     @error('modelo')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -49,6 +52,9 @@
                         name="marca"
                         value="{{ old('marca', $producto->marca) }}"
                         class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white @error('marca') border-red-500 @enderror"
+                        @if(auth()->user()->rol == 'gestor_stock')
+                            readonly
+                        @endif
                     >
                     @error('marca')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -63,6 +69,9 @@
                     <select 
                         name="categoria_id"
                         class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white @error('categoria_id') border-red-500 @enderror"
+                        @if(auth()->user()->rol == 'gestor_stock')
+                            disabled
+                        @endif
                     >
                         @foreach($categorias as $categoria)
                             <option 
@@ -86,6 +95,9 @@
                     <select 
                         name="genero"
                         class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white @error('genero') border-red-500 @enderror"
+                        @if(auth()->user()->rol == 'gestor_stock')
+                            disabled
+                        @endif
                     >
                         <option value="Hombre" {{ old('genero', $producto->genero) == 'Hombre' ? 'selected' : '' }}>Hombre</option>
                         <option value="Mujer" {{ old('genero', $producto->genero) == 'Mujer' ? 'selected' : '' }}>Mujer</option>
@@ -107,6 +119,9 @@
                         name="precio"
                         value="{{ old('precio', $producto->precio) }}"
                         class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white @error('precio') border-red-500 @enderror"
+                        @if(auth()->user()->rol == 'gestor_stock')
+                            readonly
+                        @endif
                     >
                     @error('precio')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -122,6 +137,9 @@
                         name="colores"
                         value="{{ old('colores', is_array($producto->colores) ? implode(',', $producto->colores) : $producto->colores) }}"
                         class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white @error('colores') border-red-500 @enderror"
+                        @if(auth()->user()->rol == 'gestor_stock')
+                            readonly
+                        @endif
                     >
                     @error('colores')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -138,6 +156,9 @@
                     name="descripcion"
                     rows="4"
                     class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white @error('descripcion') border-red-500 @enderror"
+                    @if(auth()->user()->rol == 'gestor_stock')
+                        readonly
+                    @endif
                 >{{ old('descripcion', $producto->descripcion) }}</textarea>
                 @error('descripcion')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -151,13 +172,17 @@
                     <label class="text-gray-400 text-xs uppercase tracking-widest font-bold">Imagen Principal <span class="text-red-500">*</span></label>
                     
                     {{-- Si ya tiene imagen, el borde inicia sólido y con el color de la marca --}}
-                    <label id="dropzone-principal" class="relative flex flex-col items-center justify-center w-full h-48 border-2 {{ $producto->imagen ? 'border-solid border-[#25a5be]' : 'border-dashed border-gray-700' }} rounded-2xl cursor-pointer bg-[#121212] hover:border-[#25a5be]/50 hover:bg-[#25a5be]/5 transition-all @error('imagen_principal') border-red-500 @enderror">
+                    <label id="dropzone-principal" class="relative flex flex-col items-center justify-center w-full h-48 border-2 {{ $producto->imagen ? 'border-solid border-[#25a5be]' : 'border-dashed border-gray-700' }} rounded-2xl cursor-pointer bg-[#121212] hover:border-[#25a5be]/50 hover:bg-[#25a5be]/5 transition-all @error('imagen_principal') border-red-500 @enderror"
+                    @if(auth()->user()->rol == 'gestor_stock')
+                        style="pointer-events:none; opacity:0.7;"
+                    @endif
+                    >
                         
                         {{-- Contenedor de Vista Previa: Se muestra activo si ya existe la imagen en la BD --}}
                         <div id="container-preview-principal" class="absolute inset-0 w-full h-full p-2 {{ $producto->imagen ? '' : 'hidden' }}">
                             <img id="preview-principal" src="{{ $producto->imagen ?? '' }}" class="w-full h-full object-contain rounded-xl">
                             <div class="absolute bottom-3 right-3 bg-black/80 text-[#25a5be] text-xs px-2 py-1 rounded border border-[#25a5be]/30 backdrop-blur-sm font-semibold">
-                                Cambiar portada
+                                {{ auth()->user()->rol == 'gestor_stock' ? 'Solo lectura' : 'Cambiar portada' }}
                             </div>
                         </div>
 
@@ -192,7 +217,11 @@
                     </div>
 
                     {{-- Dropzone interactiva para añadir NUEVAS fotos a la galería --}}
-                    <label id="dropzone-galeria" class="relative flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-700 rounded-2xl cursor-pointer bg-[#121212] hover:border-[#25a5be]/50 hover:bg-[#25a5be]/5 transition-all @error('galeria.*') border-red-500 @enderror">
+                    <label id="dropzone-galeria" class="relative flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-700 rounded-2xl cursor-pointer bg-[#121212] hover:border-[#25a5be]/50 hover:bg-[#25a5be]/5 transition-all @error('galeria.*') border-red-500 @enderror"
+                    @if(auth()->user()->rol == 'gestor_stock')
+                        style="pointer-events:none; opacity:0.7;"
+                    @endif
+                    >
                         
                         {{-- Indicador dinámico de nuevos archivos seleccionados --}}
                         <div id="status-galeria" class="absolute inset-0 flex flex-col items-center justify-center bg-[#25a5be]/5 rounded-2xl border-2 border-solid border-[#25a5be] hidden">
@@ -204,7 +233,7 @@
                         {{-- Placeholder por defecto --}}
                         <div id="placeholder-galeria" class="flex flex-col items-center justify-center text-center px-4">
                             <svg class="w-6 h-6 mb-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
-                            <p class="text-xs text-gray-400 font-bold">Añadir nuevas fotos</p>
+                            <p class="text-xs text-gray-400 font-bold">{{ auth()->user()->rol == 'gestor_stock' ? 'Solo lectura' : 'Añadir nuevas fotos' }} </p>
                             <p class="text-[9px] text-gray-500 uppercase tracking-tighter">Puedes seleccionar varias nuevas</p>
                         </div>
 

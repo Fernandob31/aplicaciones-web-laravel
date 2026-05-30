@@ -39,4 +39,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function getRolNombreAttribute()
+    {
+        return match($this->rol) {
+            'admin' => 'Admin',
+            'gestor_productos' => 'Gestor Productos',
+            'gestor_stock' => 'Gestor Stock',
+
+            default => $this->rol,
+        };
+    }
 }

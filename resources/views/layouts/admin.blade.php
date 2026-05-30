@@ -24,15 +24,19 @@
                 Productos
             </a>
             
-            <a href="/categorias" 
-               class="block px-4 py-2 rounded-md transition {{ request()->is('categorias*') ? 'bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30' : 'hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent' }}">
-                Categorías
-            </a>
+            @if(auth()->user()->rol == 'admin' || auth()->user()->rol == 'gestor_productos') 
+                <a href="/categorias" 
+                class="block px-4 py-2 rounded-md transition {{ request()->is('categorias*') ? 'bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30' : 'hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent' }}">
+                    Categorías
+                </a>
+            @endif
             
-            <a href="#" 
-               class="block px-4 py-2 rounded-md transition hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent">
-                Gestión de Usuarios
-            </a>
+            @if(auth()->user()->rol == 'admin')
+                <a href="/usuarios" 
+                class="block px-4 py-2 rounded-md transition hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent">
+                    Gestión de Usuarios
+                </a>
+            @endif
         </nav>
     </aside>
 
@@ -45,7 +49,7 @@
             
             <div class="flex items-center space-x-4">
                 <span class="text-sm text-gray-400">
-                    Hola, <span class="text-[#25a5be]">{{ auth()->user()->username }}</span> ({{ auth()->user()->rol }})
+                    Hola, <span class="text-[#25a5be]">{{ auth()->user()->username }}</span> ({{ auth()->user()->rol_nombre }})
                 </span>
                 
                 <form method="POST" action="{{ route('logout') }}">
