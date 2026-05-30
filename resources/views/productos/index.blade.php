@@ -13,12 +13,14 @@
             Administra el catálogo de zapatillas.
         </p>
     </div>
-    <a 
-        href="/productos/create"
-        class="px-5 py-2 bg-[#25a5be] hover:bg-[#1d8fa5] text-white rounded-lg transition shadow-lg"
-    >
-        + Nuevo Producto
-    </a>
+    @if(auth()->user()->rol != 'gestor_stock')
+        <a 
+            href="/productos/create"
+            class="px-5 py-2 bg-[#25a5be] hover:bg-[#1d8fa5] text-white rounded-lg transition shadow-lg"
+        >
+            + Nuevo Producto
+        </a>
+    @endif
 </div>
 
 <div class="bg-[#121212]/80 p-4 rounded-lg border border-gray-800 shadow-lg mb-6">

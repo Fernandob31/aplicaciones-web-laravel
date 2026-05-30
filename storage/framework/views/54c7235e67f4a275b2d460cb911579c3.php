@@ -42,20 +42,25 @@
                     </div>
                 </div>
 
-                <div>
-                    <h3 class="text-gray-400 text-xs uppercase tracking-widest mb-3">Colores Disponibles</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <?php 
-                            // Aseguramos que colores sea un array por si viene como string
-                            $colores = is_array($producto->colores) ? $producto->colores : explode(',', $producto->colores);
-                        ?>
-                        <?php $__currentLoopData = $colores; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $color): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <span class="px-4 py-2 bg-gray-800/50 border border-gray-700 text-gray-200 rounded-lg text-sm font-medium">
-                                <?php echo e(trim($color)); ?>
+            <div class="mt-4">
+                <h3 class="text-sm font-semibold text-gray-400 mb-2">Colores Disponibles:</h3>
+                
+                <div class="flex flex-wrap gap-3">
+                    <?php $__currentLoopData = $producto->colores; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $color): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="flex items-center gap-2 bg-[#1a1a1a] px-3 py-1.5 rounded-full border border-gray-700 shadow-sm">
+                            
+                            <span 
+                                class="w-4 h-4 rounded-full border border-gray-500/50" 
+                                style="background-color: <?php echo e($color); ?>;"
+                            ></span>
+                            
+                            <span class="text-sm text-gray-300 font-mono">
+                                <?php echo e(strtoupper($color)); ?>
 
                             </span>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </div>
+                            
+                        </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
 
                 <div>
@@ -98,4 +103,30 @@
     </div>
 </div>
 <?php $__env->stopSection(); ?>
+<?php if(session('success')): ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000, // Desaparece a los 3 segundos
+                timerProgressBar: true,
+                background: '#1a1a1a', // Fondo oscuro del panel
+                color: '#ffffff',      // Texto blanco
+                iconColor: '#25a5be',  // Color de acento
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+
+            // Disparamos el cartel usando el mensaje que mandó el Controlador
+            Toast.fire({
+                icon: 'success',
+                title: '<?php echo e(session('success')); ?>'
+            });
+        });
+    </script>
+<?php endif; ?>
 <?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\USUARIO\Desktop\Aplicaciones Web\Boyz in the Sneaker\aplicaciones-web-laravel\resources\views/productos/show.blade.php ENDPATH**/ ?>
