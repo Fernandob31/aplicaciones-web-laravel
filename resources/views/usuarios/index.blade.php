@@ -13,12 +13,6 @@
     </a>
 </div>
 
-@if(session('success'))
-    <div class="mb-4 p-4 bg-green-500/20 border border-green-500 rounded">
-        {{ session('success') }}
-    </div>
-@endif
-
 <div class="bg-[#121212]/80 rounded-lg border border-gray-800 overflow-hidden">
 
     <table class="w-full">
@@ -57,18 +51,15 @@
                             Editar
                         </a>
 
-                        <form action="/usuarios/{{ $usuario->id }}"
-                              method="POST">
-
+                    @if(auth()->id() !== $usuario->id)
+                        <form action="/usuarios/{{ $usuario->id }}" method="POST" class="form-eliminar">
                             @csrf
                             @method('DELETE')
-
-                            <button
-                                class="px-3 py-1 bg-red-600 rounded">
+                            <button class="px-3 py-1 bg-red-600 rounded">
                                 Eliminar
                             </button>
-
                         </form>
+                    @endif
 
                     </td>
 
@@ -81,5 +72,56 @@
     </table>
 
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: '#1a1a1a',
+        color: '#ffffff',
+        iconColor: '#25a5be',
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
+
+    @if(session('success'))
+        Toast.fire({
+            icon: 'success',
+            title: '{{ session('success') }}'
+        });
+    @endif
+
+    const formularios = document.querySelectorAll('.form-eliminar');
+    
+    formularios.forEach(formulario => {
+        formulario.addEventListener('submit', function (e) {
+            e.preventDefault();
+            
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Esta acción borrará el usuario de forma permanente.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#f41e1e',
+                cancelButtonColor: '#303640',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+                background: '#121212',
+                color: '#ffffff'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
+    });
+});
+</script>
 
 @endsection
