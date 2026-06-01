@@ -6,6 +6,8 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Api\ProductoApiController;
+
 
 // Rutas de invitado (para loguearse)
 Route::middleware('guest')->group(function () {
@@ -16,6 +18,10 @@ Route::middleware('guest')->group(function () {
 Route::get('/', function () {
     return redirect('/login');
 });
+
+// Api Publica
+Route::get('/api-public/productos', [ProductoApiController::class, 'index']);
+Route::get('/api-public/productos/{id}', [ProductoApiController::class, 'show']);
 
 // Rutas protegidas (solo para usuarios que ya iniciaron sesión)
 Route::middleware('auth')->group(function () {
