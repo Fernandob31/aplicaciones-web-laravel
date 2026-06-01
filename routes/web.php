@@ -58,6 +58,3 @@ Route::middleware(['auth', 'role:admin,gestor_productos,gestor_stock'])->group(f
     Route::put('/productos/{id}', [ProductoController::class, 'update']);
     Route::delete('/productos/{id}', [ProductoController::class, 'destroy']);
 });
-Route::get('/ping', function () {
-    return response()->json(['mensaje' => '¡Vercel SI está leyendo el archivo web.php!']);
-});
