@@ -31,8 +31,10 @@ class ProductoController extends Controller
         }
 
         $productos = $query->latest()->paginate(10);
+        if ($request->is('api/*')) {
+            return response()->json($productos);
+        }
         $categorias = Categoria::all();
-
         if ($request->ajax()) {
             return view('productos.partials.tabla', compact('productos'))->render();
         }
@@ -257,6 +259,11 @@ class ProductoController extends Controller
     public function show($id) {
         // Cargamos el producto con sus relaciones para que no falte nada
         $producto = Producto::with(['categoria', 'talles', 'imagenes'])->findOrFail($id);
+
+        if (request()->is('api/*')) {
+            return response()->json($producto);
+        }
+
         return view('productos.show', compact('producto'));
     }
 }
