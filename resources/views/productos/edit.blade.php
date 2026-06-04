@@ -32,7 +32,10 @@
                         type="text"
                         name="modelo"
                         value="{{ old('modelo', $producto->modelo) }}"
-                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white @error('modelo') border-red-500 @enderror"
+                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white read-only:bg-black/40 read-only:text-gray-600 read-only:border-gray-800 read-only:cursor-not-allowed read-only:focus:ring-0 @error('modelo') border-red-500 @enderror"
+                        @if(auth()->user()->rol == 'gestor_stock')
+                            readonly
+                        @endif
                     >
                     @error('modelo')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -48,7 +51,10 @@
                         type="text"
                         name="marca"
                         value="{{ old('marca', $producto->marca) }}"
-                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white @error('marca') border-red-500 @enderror"
+                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white read-only:bg-black/40 read-only:text-gray-600 read-only:border-gray-800 read-only:cursor-not-allowed read-only:focus:ring-0 @error('marca') border-red-500 @enderror"
+                        @if(auth()->user()->rol == 'gestor_stock')
+                            readonly
+                        @endif
                     >
                     @error('marca')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -62,7 +68,10 @@
 
                     <select 
                         name="categoria_id"
-                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white @error('categoria_id') border-red-500 @enderror"
+                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white disabled:bg-black/40 disabled:text-gray-600 disabled:border-gray-800 disabled:cursor-not-allowed @error('categoria_id') border-red-500 @enderror"
+                        @if(auth()->user()->rol == 'gestor_stock')
+                            disabled
+                        @endif
                     >
                         @foreach($categorias as $categoria)
                             <option 
@@ -85,7 +94,10 @@
 
                     <select 
                         name="genero"
-                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white @error('genero') border-red-500 @enderror"
+                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white disabled:bg-black/40 disabled:text-gray-600 disabled:border-gray-800 disabled:cursor-not-allowed @error('genero') border-red-500 @enderror"
+                        @if(auth()->user()->rol == 'gestor_stock')
+                            disabled
+                        @endif
                     >
                         <option value="Hombre" {{ old('genero', $producto->genero) == 'Hombre' ? 'selected' : '' }}>Hombre</option>
                         <option value="Mujer" {{ old('genero', $producto->genero) == 'Mujer' ? 'selected' : '' }}>Mujer</option>
@@ -106,7 +118,10 @@
                         step="0.01"
                         name="precio"
                         value="{{ old('precio', $producto->precio) }}"
-                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white @error('precio') border-red-500 @enderror"
+                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white read-only:bg-black/40 read-only:text-gray-600 read-only:border-gray-800 read-only:cursor-not-allowed read-only:focus:ring-0 @error('precio') border-red-500 @enderror"
+                        @if(auth()->user()->rol == 'gestor_stock')
+                            readonly
+                        @endif
                     >
                     @error('precio')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -121,7 +136,10 @@
                         type="text"
                         name="colores"
                         value="{{ old('colores', is_array($producto->colores) ? implode(',', $producto->colores) : $producto->colores) }}"
-                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white @error('colores') border-red-500 @enderror"
+                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white read-only:bg-black/40 read-only:text-gray-600 read-only:border-gray-800 read-only:cursor-not-allowed read-only:focus:ring-0 @error('colores') border-red-500 @enderror"
+                        @if(auth()->user()->rol == 'gestor_stock')
+                            readonly
+                        @endif
                     >
                     @error('colores')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -137,7 +155,10 @@
                 <textarea 
                     name="descripcion"
                     rows="4"
-                    class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white @error('descripcion') border-red-500 @enderror"
+                    class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white read-only:bg-black/40 read-only:text-gray-600 read-only:border-gray-800 read-only:cursor-not-allowed read-only:focus:ring-0 @error('descripcion') border-red-500 @enderror"
+                    @if(auth()->user()->rol == 'gestor_stock')
+                        readonly
+                    @endif
                 >{{ old('descripcion', $producto->descripcion) }}</textarea>
                 @error('descripcion')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -146,40 +167,34 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 p-6 bg-black/20 rounded-xl border border-gray-800">
                 
-                {{-- PORTADA / IMAGEN PRINCIPAL (EDICIÓN) --}}
                 <div class="space-y-4">
                     <label class="text-gray-400 text-xs uppercase tracking-widest font-bold">Imagen Principal <span class="text-red-500">*</span></label>
                     
-                    {{-- Si ya tiene imagen, el borde inicia sólido y con el color de la marca --}}
-                    <label id="dropzone-principal" class="relative flex flex-col items-center justify-center w-full h-48 border-2 {{ $producto->imagen ? 'border-solid border-[#25a5be]' : 'border-dashed border-gray-700' }} rounded-2xl cursor-pointer bg-[#121212] hover:border-[#25a5be]/50 hover:bg-[#25a5be]/5 transition-all @error('imagen_principal') border-red-500 @enderror">
+                    <label id="dropzone-principal" class="relative flex flex-col items-center justify-center w-full h-48 border-2 {{ $producto->imagen ? 'border-solid border-[#25a5be]' : 'border-dashed border-gray-700' }} rounded-2xl bg-[#121212] transition-all @error('imagen_principal') border-red-500 @enderror {{ auth()->user()->rol == 'gestor_stock' ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer hover:border-[#25a5be]/50 hover:bg-[#25a5be]/5' }}">
                         
-                        {{-- Contenedor de Vista Previa: Se muestra activo si ya existe la imagen en la BD --}}
                         <div id="container-preview-principal" class="absolute inset-0 w-full h-full p-2 {{ $producto->imagen ? '' : 'hidden' }}">
                             <img id="preview-principal" src="{{ $producto->imagen ?? '' }}" class="w-full h-full object-contain rounded-xl">
                             <div class="absolute bottom-3 right-3 bg-black/80 text-[#25a5be] text-xs px-2 py-1 rounded border border-[#25a5be]/30 backdrop-blur-sm font-semibold">
-                                Cambiar portada
+                                {{ auth()->user()->rol == 'gestor_stock' ? 'Solo lectura' : 'Cambiar portada' }}
                             </div>
                         </div>
 
-                        {{-- Estado Vacío / Placeholder: Se oculta automáticamente si ya hay imagen --}}
                         <div id="placeholder-principal" class="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4 {{ $producto->imagen ? 'hidden' : '' }}">
                             <svg class="w-10 h-10 mb-3 text-[#25a5be]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                             <p class="mb-1 text-sm text-gray-400 font-bold">Subir portada</p>
                             <p class="text-xs text-gray-500 uppercase tracking-tighter">Click para examinar</p>
                         </div>
 
-                        <input type="file" id="input-principal" name="imagen_principal" class="hidden" accept="image/*" />
+                        <input type="file" id="input-principal" name="imagen_principal" class="hidden" accept="image/*" @if(auth()->user()->rol == 'gestor_stock') disabled @endif />
                     </label>
                     @error('imagen_principal')
                         <p class="text-red-500 text-sm mt-1 text-center">{{ $message }}</p>
                     @enderror
                 </div>
 
-                {{-- GALERÍA PROMOCIONAL (EDICIÓN) --}}
                 <div class="space-y-4">
                     <label class="text-gray-400 text-xs uppercase tracking-widest font-bold">Galería Promocional</label>
                     
-                    {{-- Muestra las fotos actuales que ya están guardadas --}}
                     <div class="grid grid-cols-4 gap-2 overflow-y-auto h-20 p-2 bg-black/20 rounded-lg border border-gray-800">
                         @foreach($producto->imagenes as $foto)
                             <div class="aspect-square rounded-lg overflow-hidden border border-gray-800">
@@ -191,24 +206,21 @@
                         @endif
                     </div>
 
-                    {{-- Dropzone interactiva para añadir NUEVAS fotos a la galería --}}
-                    <label id="dropzone-galeria" class="relative flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-700 rounded-2xl cursor-pointer bg-[#121212] hover:border-[#25a5be]/50 hover:bg-[#25a5be]/5 transition-all @error('galeria.*') border-red-500 @enderror">
+                    <label id="dropzone-galeria" class="relative flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-700 rounded-2xl bg-[#121212] transition-all @error('galeria.*') border-red-500 @enderror {{ auth()->user()->rol == 'gestor_stock' ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer hover:border-[#25a5be]/50 hover:bg-[#25a5be]/5' }}">
                         
-                        {{-- Indicador dinámico de nuevos archivos seleccionados --}}
                         <div id="status-galeria" class="absolute inset-0 flex flex-col items-center justify-center bg-[#25a5be]/5 rounded-2xl border-2 border-solid border-[#25a5be] hidden">
                             <svg class="w-6 h-6 text-[#25a5be] mb-0.5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             <p id="text-galeria-status" class="text-white font-bold text-xs"></p>
                             <p class="text-[10px] text-gray-400">Click para reemplazar la nueva selección</p>
                         </div>
 
-                        {{-- Placeholder por defecto --}}
                         <div id="placeholder-galeria" class="flex flex-col items-center justify-center text-center px-4">
                             <svg class="w-6 h-6 mb-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
-                            <p class="text-xs text-gray-400 font-bold">Añadir nuevas fotos</p>
+                            <p class="text-xs text-gray-400 font-bold">{{ auth()->user()->rol == 'gestor_stock' ? 'Solo lectura' : 'Añadir nuevas fotos' }} </p>
                             <p class="text-[9px] text-gray-500 uppercase tracking-tighter">Puedes seleccionar varias nuevas</p>
                         </div>
 
-                        <input type="file" id="input-galeria" name="galeria[]" class="hidden" multiple accept="image/*" />
+                        <input type="file" id="input-galeria" name="galeria[]" class="hidden" multiple accept="image/*" @if(auth()->user()->rol == 'gestor_stock') disabled @endif />
                     </label>
                     @error('galeria.*')
                         <p class="text-red-500 text-sm mt-1 text-center">{{ $message }}</p>

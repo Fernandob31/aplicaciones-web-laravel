@@ -23,7 +23,7 @@ class CategoriaController extends Controller
             'nombre' => $request->nombre
         ]);
 
-        return redirect('/categorias'); // redirige 
+        return redirect('/categorias')->with('success', 'Categoría creada exitosamente');; // redirige 
     }
 
     public function edit($id) {
@@ -39,7 +39,7 @@ class CategoriaController extends Controller
             'nombre' => $request->nombre
         ]);
 
-        return redirect('/categorias');
+        return redirect('/categorias')->with('success', 'Categoría actualizada exitosamente');;
     }
 
     public function destroy($id) {
@@ -47,6 +47,6 @@ class CategoriaController extends Controller
 
         $categoria->delete();
 
-        return redirect('/categorias');
+        return redirect('/categorias')->with('success', 'Categoría eliminada exitosamente');;
     }
 }

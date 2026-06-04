@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('titulo', 'Productos'); ?>
 
 <?php $__env->startSection('contenido'); ?>
@@ -13,115 +11,215 @@
             Administra el catálogo de zapatillas.
         </p>
     </div>
-    <a 
-        href="/productos/create"
-        class="px-5 py-2 bg-[#25a5be] hover:bg-[#1d8fa5] text-white rounded-lg transition shadow-lg"
-    >
-        + Nuevo Producto
-    </a>
+    <?php if(auth()->user()->rol != 'gestor_stock'): ?>
+        <a 
+            href="/productos/create"
+            class="px-5 py-2 bg-[#25a5be] hover:bg-[#1d8fa5] text-white rounded-lg transition shadow-lg"
+        >
+            + Nuevo Producto
+        </a>
+    <?php endif; ?>
+</div>
+
+<div class="bg-[#121212]/80 p-4 rounded-lg border border-gray-800 shadow-lg mb-6">
+    <form id="form-filtros" action="<?php echo e(url('/productos')); ?>" method="GET" class="flex flex-col md:flex-row gap-4">
+    
+    
+    <div class="flex-1">
+        <input 
+            type="text" 
+            id="input-buscar"
+            name="buscar" 
+            value="<?php echo e(request('buscar')); ?>" 
+            placeholder="Buscar marca o modelo..." 
+            class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2.5 text-white text-sm focus:border-[#25a5be] focus:ring-1 focus:ring-[#25a5be] transition-colors"
+            autocomplete="off"
+        >
+    </div>
+
+    
+    <div class="w-full md:w-48">
+        <select id="select-categoria" name="categoria_id" class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2.5 text-white text-sm focus:border-[#25a5be] focus:ring-1 focus:ring-[#25a5be]">
+            <option value="">Todas las categorías</option>
+            <?php $__currentLoopData = $categorias; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categoria): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($categoria->id); ?>" <?php echo e(request('categoria_id') == $categoria->id ? 'selected' : ''); ?>>
+                    <?php echo e($categoria->nombre); ?>
+
+                </option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </select>
+    </div>
+
+    
+    <div class="flex gap-2">
+        <a href="<?php echo e(url('/productos')); ?>" id="btn-limpiar" class="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-semibold rounded-lg border border-gray-700 transition-colors flex items-center <?php echo e(request()->anyFilled(['buscar', 'categoria_id']) ? '' : 'hidden'); ?>">
+            Limpiar
+        </a>
+    </div>
+
+</form>
 </div>
 
 <div class="bg-[#121212]/80 rounded-lg border border-gray-800 shadow-lg overflow-hidden">
-    <table class="w-full text-left">
-        <thead class="bg-[#1a1a1a] border-b border-gray-700">
-            <tr>
-                <th class="p-4 text-gray-300">
-                    ID
-                </th>
-                <th class="p-4 text-gray-300">
-                    Modelo
-                </th>
-                <th class="p-4 text-gray-300">
-                    Marca
-                </th>
-                <th class="p-4 text-gray-300">
-                    Categoría
-                </th>
-                <th class="p-4 text-gray-300">
-                    Precio
-                </th>
-                <th class="p-4 text-gray-300">
-                    Stock Total
-                </th>
-                <th class="p-4 text-gray-300">
-                    Género
-                </th>
-                <th class="p-4 text-gray-300">
-                    Acciones
-                </th>
-            </tr>
 
-        </thead>
+<div id="contenedor-tabla" class="bg-[#121212]/80 rounded-lg border border-gray-800 shadow-lg overflow-hidden relative">
+    
+    
+    <div id="loading-overlay" class="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center hidden z-20">
+        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-[#25a5be]"></div>
+    </div>
 
-        <tbody>
-            <?php $__empty_1 = true; $__currentLoopData = $productos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $producto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                <tr class="border-b border-gray-800 hover:bg-[#1a1a1a]/50 transition">
-                    <td class="p-4 text-gray-400">
-                        <?php echo e($producto->id); ?>
-
-                    </td>
-                    <td class="p-4 text-white font-medium">
-                        <?php echo e($producto->modelo); ?>
-
-                    </td>
-                    <td class="p-4 text-gray-300">
-                        <?php echo e($producto->marca); ?>
-
-                    </td>
-                    <td class="p-4 text-gray-300">
-                        <?php echo e($producto->categoria->nombre); ?>
-
-                    </td>
-                    <td class="p-4 text-[#25a5be] font-semibold">
-                        $ <?php echo e(number_format($producto->precio, 0, ',', '.')); ?>
-
-                    </td>
-                    <td class="p-4 text-gray-300">
-                        <?php echo e($producto->talles->sum('stock')); ?>
-
-                    </td>
-                    <td class="p-4 text-gray-300">
-                        <?php echo e($producto->genero); ?>
-
-                    </td>
-                    <td class="p-4 flex gap-2">
-                        <a 
-                            href="/productos/<?php echo e($producto->id); ?>/edit"
-                            class="px-3 py-1 bg-yellow-500/10 text-yellow-400 rounded border border-yellow-500/30 hover:bg-yellow-500/20 transition">
-                            Editar
-                        </a>
-                        <form action="/productos/<?php echo e($producto->id); ?>" method="POST">
-                            <?php echo csrf_field(); ?>
-                            <?php echo method_field('DELETE'); ?>
-                            <button 
-                                type="submit"
-                                class="px-3 py-1 bg-red-500/10 text-red-400 rounded border border-red-500/30 hover:bg-red-500/20 transition"
-                            >
-                                Eliminar
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-
-                <tr>
-
-                    <td colspan="7" class="p-6 text-center text-gray-500">
-
-                        No hay productos registrados.
-
-                    </td>
-
-                </tr>
-
-            <?php endif; ?>
-
-        </tbody>
-
-    </table>
-
+    <div id="tabla-renderizada">
+        <?php echo $__env->make('productos.partials.tabla', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('form-filtros');
+    const selectCategoria = document.getElementById('select-categoria');
+    const inputBuscar = document.getElementById('input-buscar');
+    const container = document.getElementById('tabla-renderizada');
+    const btnLimpiar = document.getElementById('btn-limpiar');
+    const loading = document.getElementById('loading-overlay');    
+    // Variable para recordar en qué página exacta estamos
+    let urlActual = window.location.href;
+    // --- CONFIGURACIÓN DEL TOAST (Swal.mixin) ---
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000, // 3 segundos y se cierra
+        timerProgressBar: true,
+        background: '#1a1a1a', // Fondo oscuro
+        color: '#ffffff',      // Texto blanco
+        iconColor: '#25a5be',  // Tu color de acento
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
+
+    function obtenerProductos(url) {
+        urlActual = url;
+        loading.classList.remove('hidden');
+
+        fetch(url, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            container.innerHTML = html;
+            loading.classList.add('hidden');
+            inicializarEventosEliminar(); // Re-vincula los eventos a la nueva tabla
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            loading.classList.add('hidden');
+        });
+    }
+
+    function aplicarFiltros() {
+        const formData = new FormData(form);
+        const params = new URLSearchParams(formData).toString();
+        const url = `${form.action}?${params}`;
+        
+        if (inputBuscar.value || selectCategoria.value) {
+            btnLimpiar.classList.remove('hidden');
+        } else {
+            btnLimpiar.classList.add('hidden');
+        }
+
+        obtenerProductos(url);
+    }
+
+    if (selectCategoria) selectCategoria.addEventListener('change', aplicarFiltros);
+
+    if (inputBuscar) {
+        let temporizador;
+        inputBuscar.addEventListener('input', function() {
+            clearTimeout(temporizador);
+            temporizador = setTimeout(aplicarFiltros, 400);
+        });
+    }
+
+    container.addEventListener('click', function(e) {
+        const enlacePaginacion = e.target.closest('.enlaces-paginacion a');
+        if (enlacePaginacion) {
+            e.preventDefault();
+            obtenerProductos(enlacePaginacion.href);
+        }
+    });
+
+    // --- NUEVA FUNCIÓN DE ELIMINACIÓN ASÍNCRONA ---
+    function inicializarEventosEliminar() {
+        const formularios = document.querySelectorAll('.form-eliminar');
+        
+        formularios.forEach(formulario => {
+            formulario.addEventListener('submit', function (e) {
+                e.preventDefault();
+                
+                // Obtenemos la URL del action del form y el token de seguridad de Laravel
+                const formEl = this;
+                const urlEliminar = formEl.action;
+                const token = formEl.querySelector('input[name="_token"]').value;
+
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Esta acción borrará el producto de forma permanente.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#f41e1e',
+                    cancelButtonColor: '#303640',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar',
+                    background: '#121212',
+                    color: '#ffffff'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        
+                        // Mostramos el spinner de la tabla mientras borra
+                        loading.classList.remove('hidden');
+
+                        // Enviamos la petición DELETE por detrás
+                        fetch(urlEliminar, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': token,
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Disparamos el cartelito de éxito en la esquina
+                            Toast.fire({
+                                icon: 'success',
+                                title: data.message || 'Producto eliminado'
+                            });
+                            
+                            // Recargamos solo la tabla de forma fluida
+                            obtenerProductos(urlActual); 
+                        })
+                        .catch(error => {
+                            console.error('Error al eliminar:', error);
+                            loading.classList.add('hidden');
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Hubo un error al eliminar'
+                            });
+                        });
+                    }
+                });
+            });
+        });
+    }
+
+    inicializarEventosEliminar();
+});
+</script>
 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\USUARIO\Desktop\Aplicaciones Web\Boyz in the Sneaker\aplicaciones-web-laravel\resources\views/productos/index.blade.php ENDPATH**/ ?>

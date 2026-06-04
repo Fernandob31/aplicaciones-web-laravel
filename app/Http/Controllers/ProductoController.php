@@ -12,9 +12,31 @@ use Cloudinary\Cloudinary;
 
 class ProductoController extends Controller
 {
-    public function index() {
-        $productos = Producto::with(['categoria', 'talles'])->get();
-        return view('productos.index', compact('productos'));
+    public function index(Request $request) {
+        $query = Producto::with('talles', 'categoria');
+
+        if ($request->filled('buscar')) {
+            $buscar = mb_strtolower($request->buscar, 'UTF-8');
+            $query->where(function ($query) use ($buscar) {
+                $query->whereRaw('LOWER(marca) LIKE ?', ["%{$buscar}%"])
+                    ->orWhereRaw('LOWER(modelo) LIKE ?', ["%{$buscar}%"]);
+            });
+        }
+        
+        if ($request->filled('categoria_id')) {
+            $query->where('categoria_id', $request->categoria_id);
+        }
+        if ($request->filled('genero')){
+            $query->where('genero', $request->genero);
+        }
+
+        $productos = $query->latest()->paginate(10);
+        $categorias = Categoria::all();
+        if ($request->ajax()) {
+            return view('productos.partials.tabla', compact('productos'))->render();
+        }
+
+        return view('productos.index', compact('productos', 'categorias'));
     }
 
     public function create() {
@@ -121,25 +143,51 @@ class ProductoController extends Controller
         ];
 
         // Validacion
-        $request->validate([
-            'categoria_id'     => 'required|exists:categorias,id',
-            'modelo'           => 'required|string|max:255',
-            'marca'            => 'required|string|max:255',
-            'precio'           => 'required|numeric|min:0',
-            'colores'          => 'required|string',
-            'genero'           => 'required|string',
-            'descripcion'      => 'required|string',
-            'imagen_principal' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'talles'           => 'nullable|array',
-            'talles.*'         => 'nullable|string',
-            'stocks'           => 'nullable|array',
-            'stocks.*'         => 'nullable|numeric|min:0',
-            'galeria'          => 'nullable|array',
-            'galeria.*'        => 'image|mimes:jpeg,png,jpg,webp|max:2048'
-        ], $mensajes);
-
+        if (auth()->user()->rol == 'gestor_stock') {
+            $request->validate([
+                'talles'           => 'nullable|array',
+                'talles.*'         => 'nullable|string',
+                'stocks'           => 'nullable|array',
+                'stocks.*'         => 'nullable|numeric|min:0'
+            ], $mensajes);
+        } else {
+            $request->validate([
+                'categoria_id'     => 'required|exists:categorias,id',
+                'modelo'           => 'required|string|max:255',
+                'marca'            => 'required|string|max:255',
+                'precio'           => 'required|numeric|min:0',
+                'colores'          => 'required|string',
+                'genero'           => 'required|string',
+                'descripcion'      => 'required|string',
+                'imagen_principal' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+                'talles'           => 'nullable|array',
+                'talles.*'         => 'nullable|string',
+                'stocks'           => 'nullable|array',
+                'stocks.*'         => 'nullable|numeric|min:0',
+                'galeria'          => 'nullable|array',
+                'galeria.*'        => 'image|mimes:jpeg,png,jpg,webp|max:2048'
+            ], $mensajes);
+        }
 
         $producto = Producto::findOrFail($id);
+        if (auth()->user()->rol == 'gestor_stock') {
+            // Solo actualiza talles y stock
+            $producto->talles()->delete();
+            if ($request->has('talles') && is_array($request->talles)) {
+                foreach ($request->talles as $index => $talle) {
+                    if ($talle) {
+                        ProductoTalle::create([
+                            'producto_id' => $producto->id,
+                            'talle' => $talle,
+                            'stock' => $request->stocks[$index]
+                        ]);
+                    }
+                }
+            }
+            return redirect('/productos/' . $producto->id)
+                ->with('success', 'Stock actualizado correctamente');
+        }
+
         $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
         $datosActualizar = [
             'categoria_id' => $request->categoria_id,
@@ -195,7 +243,14 @@ class ProductoController extends Controller
         $producto = Producto::findOrFail($id);
         $producto->delete();
 
-        return redirect('/productos');
+        if (request()->ajax()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Producto eliminado correctamente'
+            ]);
+        }
+
+        return redirect('/productos')->with('success', 'Producto eliminado');
     }
 
     public function show($id) {
