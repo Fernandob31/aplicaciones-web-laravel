@@ -7,6 +7,8 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\ProductoApiController;
+use App\Http\Controllers\Api\VentaApiController;
+use App\Http\Controllers\VentaController;
 
 
 // Rutas de invitado (para loguearse)
@@ -23,6 +25,9 @@ Route::get('/', function () {
 Route::get('/api-public/productos', [ProductoApiController::class, 'index']);
 Route::get('/api-public/productos/{id}', [ProductoApiController::class, 'show']);
 
+//Ventas
+Route::post('/api-public/ventas', [VentaApiController::class, 'store']);
+
 // Rutas protegidas (solo para usuarios que ya iniciaron sesión)
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -32,6 +37,9 @@ Route::middleware('auth')->group(function () {
 // Grupa para acceder CRUD usuarios
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('usuarios', UserController::class);
+
+    Route::get('/ventas', [VentaController::class, 'index'])->name('ventas.index');
+    Route::get('/ventas/{id}', [VentaController::class, 'show'])->name('ventas.show');
 });
 
 // Grupa para acceder CRUD caregorias

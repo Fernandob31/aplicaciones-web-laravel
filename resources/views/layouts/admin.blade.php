@@ -32,8 +32,13 @@
             @endif
             
             @if(auth()->user()->rol == 'admin')
+                <a href="/ventas" 
+                class="block px-4 py-2 rounded-md transition {{ request()->is('ventas*') ? 'bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30' : 'hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent' }}">
+                    Facturación y Ventas
+                </a>
+
                 <a href="/usuarios" 
-                class="block px-4 py-2 rounded-md transition hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent">
+                class="block px-4 py-2 rounded-md transition {{ request()->is('usuarios*') ? 'bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30' : 'hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent' }}">
                     Gestión de Usuarios
                 </a>
             @endif
