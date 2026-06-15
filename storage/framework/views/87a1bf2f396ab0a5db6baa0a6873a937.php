@@ -30,7 +30,7 @@
                         type="text"
                         name="modelo"
                         value="<?php echo e(old('modelo', $producto->modelo)); ?>"
-                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white <?php $__errorArgs = ['modelo'];
+                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white read-only:bg-black/40 read-only:text-gray-600 read-only:border-gray-800 read-only:cursor-not-allowed read-only:focus:ring-0 <?php $__errorArgs = ['modelo'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -63,7 +63,7 @@ unset($__errorArgs, $__bag); ?>
                         type="text"
                         name="marca"
                         value="<?php echo e(old('marca', $producto->marca)); ?>"
-                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white <?php $__errorArgs = ['marca'];
+                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white read-only:bg-black/40 read-only:text-gray-600 read-only:border-gray-800 read-only:cursor-not-allowed read-only:focus:ring-0 <?php $__errorArgs = ['marca'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -94,7 +94,7 @@ unset($__errorArgs, $__bag); ?>
 
                     <select 
                         name="categoria_id"
-                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white <?php $__errorArgs = ['categoria_id'];
+                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white disabled:bg-black/40 disabled:text-gray-600 disabled:border-gray-800 disabled:cursor-not-allowed <?php $__errorArgs = ['categoria_id'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -136,7 +136,7 @@ unset($__errorArgs, $__bag); ?>
 
                     <select 
                         name="genero"
-                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white <?php $__errorArgs = ['genero'];
+                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white disabled:bg-black/40 disabled:text-gray-600 disabled:border-gray-800 disabled:cursor-not-allowed <?php $__errorArgs = ['genero'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -174,7 +174,7 @@ unset($__errorArgs, $__bag); ?>
                         step="0.01"
                         name="precio"
                         value="<?php echo e(old('precio', $producto->precio)); ?>"
-                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white <?php $__errorArgs = ['precio'];
+                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white read-only:bg-black/40 read-only:text-gray-600 read-only:border-gray-800 read-only:cursor-not-allowed read-only:focus:ring-0 <?php $__errorArgs = ['precio'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -206,7 +206,7 @@ unset($__errorArgs, $__bag); ?>
                         type="text"
                         name="colores"
                         value="<?php echo e(old('colores', is_array($producto->colores) ? implode(',', $producto->colores) : $producto->colores)); ?>"
-                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white <?php $__errorArgs = ['colores'];
+                        class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white read-only:bg-black/40 read-only:text-gray-600 read-only:border-gray-800 read-only:cursor-not-allowed read-only:focus:ring-0 <?php $__errorArgs = ['colores'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -239,7 +239,7 @@ unset($__errorArgs, $__bag); ?>
                 <textarea 
                     name="descripcion"
                     rows="4"
-                    class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white <?php $__errorArgs = ['descripcion'];
+                    class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-3 text-white read-only:bg-black/40 read-only:text-gray-600 read-only:border-gray-800 read-only:cursor-not-allowed read-only:focus:ring-0 <?php $__errorArgs = ['descripcion'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -265,24 +265,17 @@ unset($__errorArgs, $__bag); ?>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8 p-6 bg-black/20 rounded-xl border border-gray-800">
                 
-                
                 <div class="space-y-4">
                     <label class="text-gray-400 text-xs uppercase tracking-widest font-bold">Imagen Principal <span class="text-red-500">*</span></label>
                     
-                    
-                    <label id="dropzone-principal" class="relative flex flex-col items-center justify-center w-full h-48 border-2 <?php echo e($producto->imagen ? 'border-solid border-[#25a5be]' : 'border-dashed border-gray-700'); ?> rounded-2xl cursor-pointer bg-[#121212] hover:border-[#25a5be]/50 hover:bg-[#25a5be]/5 transition-all <?php $__errorArgs = ['imagen_principal'];
+                    <label id="dropzone-principal" class="relative flex flex-col items-center justify-center w-full h-48 border-2 <?php echo e($producto->imagen ? 'border-solid border-[#25a5be]' : 'border-dashed border-gray-700'); ?> rounded-2xl bg-[#121212] transition-all <?php $__errorArgs = ['imagen_principal'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>"
-                    <?php if(auth()->user()->rol == 'gestor_stock'): ?>
-                        style="pointer-events:none; opacity:0.7;"
-                    <?php endif; ?>
-                    >
-                        
+unset($__errorArgs, $__bag); ?> <?php echo e(auth()->user()->rol == 'gestor_stock' ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer hover:border-[#25a5be]/50 hover:bg-[#25a5be]/5'); ?>">
                         
                         <div id="container-preview-principal" class="absolute inset-0 w-full h-full p-2 <?php echo e($producto->imagen ? '' : 'hidden'); ?>">
                             <img id="preview-principal" src="<?php echo e($producto->imagen ?? ''); ?>" class="w-full h-full object-contain rounded-xl">
@@ -292,14 +285,13 @@ unset($__errorArgs, $__bag); ?>"
                             </div>
                         </div>
 
-                        
                         <div id="placeholder-principal" class="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4 <?php echo e($producto->imagen ? 'hidden' : ''); ?>">
                             <svg class="w-10 h-10 mb-3 text-[#25a5be]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                             <p class="mb-1 text-sm text-gray-400 font-bold">Subir portada</p>
                             <p class="text-xs text-gray-500 uppercase tracking-tighter">Click para examinar</p>
                         </div>
 
-                        <input type="file" id="input-principal" name="imagen_principal" class="hidden" accept="image/*" />
+                        <input type="file" id="input-principal" name="imagen_principal" class="hidden" accept="image/*" <?php if(auth()->user()->rol == 'gestor_stock'): ?> disabled <?php endif; ?> />
                     </label>
                     <?php $__errorArgs = ['imagen_principal'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -313,10 +305,8 @@ endif;
 unset($__errorArgs, $__bag); ?>
                 </div>
 
-                
                 <div class="space-y-4">
                     <label class="text-gray-400 text-xs uppercase tracking-widest font-bold">Galería Promocional</label>
-                    
                     
                     <div class="grid grid-cols-4 gap-2 overflow-y-auto h-20 p-2 bg-black/20 rounded-lg border border-gray-800">
                         <?php $__currentLoopData = $producto->imagenes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $foto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -329,20 +319,14 @@ unset($__errorArgs, $__bag); ?>
                         <?php endif; ?>
                     </div>
 
-                    
-                    <label id="dropzone-galeria" class="relative flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-700 rounded-2xl cursor-pointer bg-[#121212] hover:border-[#25a5be]/50 hover:bg-[#25a5be]/5 transition-all <?php $__errorArgs = ['galeria.*'];
+                    <label id="dropzone-galeria" class="relative flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-700 rounded-2xl bg-[#121212] transition-all <?php $__errorArgs = ['galeria.*'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>"
-                    <?php if(auth()->user()->rol == 'gestor_stock'): ?>
-                        style="pointer-events:none; opacity:0.7;"
-                    <?php endif; ?>
-                    >
-                        
+unset($__errorArgs, $__bag); ?> <?php echo e(auth()->user()->rol == 'gestor_stock' ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer hover:border-[#25a5be]/50 hover:bg-[#25a5be]/5'); ?>">
                         
                         <div id="status-galeria" class="absolute inset-0 flex flex-col items-center justify-center bg-[#25a5be]/5 rounded-2xl border-2 border-solid border-[#25a5be] hidden">
                             <svg class="w-6 h-6 text-[#25a5be] mb-0.5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -350,14 +334,13 @@ unset($__errorArgs, $__bag); ?>"
                             <p class="text-[10px] text-gray-400">Click para reemplazar la nueva selección</p>
                         </div>
 
-                        
                         <div id="placeholder-galeria" class="flex flex-col items-center justify-center text-center px-4">
                             <svg class="w-6 h-6 mb-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
                             <p class="text-xs text-gray-400 font-bold"><?php echo e(auth()->user()->rol == 'gestor_stock' ? 'Solo lectura' : 'Añadir nuevas fotos'); ?> </p>
                             <p class="text-[9px] text-gray-500 uppercase tracking-tighter">Puedes seleccionar varias nuevas</p>
                         </div>
 
-                        <input type="file" id="input-galeria" name="galeria[]" class="hidden" multiple accept="image/*" />
+                        <input type="file" id="input-galeria" name="galeria[]" class="hidden" multiple accept="image/*" <?php if(auth()->user()->rol == 'gestor_stock'): ?> disabled <?php endif; ?> />
                     </label>
                     <?php $__errorArgs = ['galeria.*'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');

@@ -4,18 +4,11 @@
 
 <div class="flex items-center justify-between mb-6">
     <div>
-        <h1 class="text-3xl font-bold text-white">
-            Gestión de Productos
-        </h1>
-        <p class="text-gray-400 mt-1">
-            Administra el catálogo de zapatillas.
-        </p>
+        <h1 class="text-3xl font-bold text-white"> Gestión de Productos </h1>
+        <p class="text-gray-400 mt-1"> Administra el catálogo de zapatillas. </p>
     </div>
     <?php if(auth()->user()->rol != 'gestor_stock'): ?>
-        <a 
-            href="/productos/create"
-            class="px-5 py-2 bg-[#25a5be] hover:bg-[#1d8fa5] text-white rounded-lg transition shadow-lg"
-        >
+        <a href="/productos/create" class="px-5 py-2 bg-[#25a5be] hover:bg-[#1d8fa5] text-white rounded-lg transition shadow-lg">
             + Nuevo Producto
         </a>
     <?php endif; ?>

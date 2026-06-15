@@ -40,7 +40,23 @@
                             <span class="text-[#25a5be] text-sm font-bold tracking-widest uppercase">{{ $producto->marca }}</span>
                             <h1 class="text-4xl font-extrabold text-white mt-1">{{ $producto->modelo }}</h1>
                         </div>
-                        <p class="text-3xl font-light text-[#25a5be]">${{ number_format($producto->precio, 0, ',', '.') }}</p>
+                        <div class="text-right">
+                            @if($producto->tiene_descuento)
+                                <p class="text-sm text-gray-500 line-through">
+                                    ${{ number_format($producto->precio, 0, ',', '.') }}
+                                </p>
+                                <p class="text-sm font-bold text-red-400">
+                                    {{ $producto->descuento }}% OFF
+                                </p>
+                                <p class="text-3xl font-light text-[#25a5be]">
+                                    ${{ number_format($producto->precio_final, 0, ',', '.') }}
+                                </p>
+                            @else
+                                <p class="text-3xl font-light text-[#25a5be]">
+                                    ${{ number_format($producto->precio, 0, ',', '.') }}
+                                </p>
+                            @endif
+                        </div>
                     </div>
                 </div>
 

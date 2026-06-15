@@ -1,77 +1,69 @@
 @extends('layouts.admin')
 
-@section('titulo', 'Productos')
+@section('titulo', 'Promociones')
 
 @section('contenido')
 
 <div class="flex items-center justify-between mb-6">
     <div>
-        <h1 class="text-3xl font-bold text-white"> Gestión de Productos </h1>
-        <p class="text-gray-400 mt-1"> Administra el catálogo de zapatillas. </p>
+        <h1 class="text-3xl font-bold text-white"> Gestión de Promociones </h1>
+        <p class="text-gray-400 mt-1"> Administra las promociones activas y vencidas. </p>
     </div>
-    @if(auth()->user()->rol != 'gestor_stock')
-        <a href="/productos/create" class="px-5 py-2 bg-[#25a5be] hover:bg-[#1d8fa5] text-white rounded-lg transition shadow-lg">
-            + Nuevo Producto
-        </a>
-    @endif
+    <a href="/promociones/create" class="px-5 py-2 bg-[#25a5be] hover:bg-[#1d8fa5] text-white rounded-lg transition shadow-lg">
+        + Nueva Promoción
+    </a>
 </div>
 
 <div class="bg-[#121212]/80 p-4 rounded-lg border border-gray-800 shadow-lg mb-6">
-    <form id="form-filtros" action="{{ url('/productos') }}" method="GET" class="flex flex-col md:flex-row gap-4">
-    
-    {{-- Buscador por texto --}}
-    <div class="flex-1">
-        <input 
-            type="text" 
-            id="input-buscar"
-            name="buscar" 
-            value="{{ request('buscar') }}" 
-            placeholder="Buscar marca o modelo..." 
-            class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2.5 text-white text-sm focus:border-[#25a5be] focus:ring-1 focus:ring-[#25a5be] transition-colors"
-            autocomplete="off"
-        >
-    </div>
+    <form id="form-filtros" action="{{ url('/promociones') }}" method="GET" class="flex flex-col md:flex-row gap-4">
 
-    {{-- Filtro por Categoría --}}
-    <div class="w-full md:w-48">
-        <select id="select-categoria" name="categoria_id" class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2.5 text-white text-sm focus:border-[#25a5be] focus:ring-1 focus:ring-[#25a5be]">
-            <option value="">Todas las categorías</option>
-            @foreach($categorias as $categoria)
-                <option value="{{ $categoria->id }}" {{ request('categoria_id') == $categoria->id ? 'selected' : '' }}>
-                    {{ $categoria->nombre }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+        {{-- Buscador --}}
+        <div class="flex-1">
+            <input 
+                type="text"
+                id="input-buscar"
+                name="buscar"
+                value="{{ request('buscar') }}"
+                placeholder="Buscar promoción..."
+                class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2.5 text-white">
+        </div>
 
-    {{-- Botones de Acción --}}
-    <div class="flex gap-2">
-        <a href="{{ url('/productos') }}" id="btn-limpiar" class="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-semibold rounded-lg border border-gray-700 transition-colors flex items-center {{ request()->anyFilled(['buscar', 'categoria_id']) ? '' : 'hidden' }}">
-            Limpiar
-        </a>
-    </div>
-
-</form>
+        {{-- Estado --}}
+        <div class="w-full md:w-48">
+            <select id="select-estado" name="estado" class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2.5 text-white">
+                <option value=""> Todos los estados </option>
+                <option value="activa" {{ request('estado') == 'activa' ? 'selected' : '' }}> Activas </option>
+                <option value="finalizada" {{ request('estado') == 'finalizada' ? 'selected' : '' }}> Finalizadas </option>
+            </select>
+        </div>
+        {{-- Botones de Acción --}}
+        <div class="flex gap-2">
+            <a href="{{ url('/promociones') }}" id="btn-limpiar" class="px-4 py-2.5 bg-gray-800 text-gray-300 rounded-lg">
+                Limpiar
+            </a>
+        </div>
+    </form>
 </div>
 
 <div class="bg-[#121212]/80 rounded-lg border border-gray-800 shadow-lg overflow-hidden">
-{{-- Modificado para soportar la carga dinámica --}}
-<div id="contenedor-tabla" class="bg-[#121212]/80 rounded-lg border border-gray-800 shadow-lg overflow-hidden relative">
-    
-    {{-- Spinner de carga invisible por defecto --}}
-    <div id="loading-overlay" class="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center hidden z-20">
-        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-[#25a5be]"></div>
-    </div>
+    {{-- Modificado para soportar la carga dinámica --}}
+    <div id="contenedor-tabla" class="bg-[#121212]/80 rounded-lg border border-gray-800 shadow-lg overflow-hidden relative">
+        
+        {{-- Spinner de carga invisible por defecto --}}
+        <div id="loading-overlay" class="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center hidden z-20">
+            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-[#25a5be]"></div>
+        </div>
 
-    <div id="tabla-renderizada">
-        @include('productos.partials.tabla')
+        <div id="tabla-renderizada">
+            @include('promociones.partials.tabla')
+        </div>
     </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('form-filtros');
-    const selectCategoria = document.getElementById('select-categoria');
+    const selectEstado = document.getElementById('select-estado');
     const inputBuscar = document.getElementById('input-buscar');
     const container = document.getElementById('tabla-renderizada');
     const btnLimpiar = document.getElementById('btn-limpiar');
@@ -120,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const params = new URLSearchParams(formData).toString();
         const url = `${form.action}?${params}`;
         
-        if (inputBuscar.value || selectCategoria.value) {
+        if (inputBuscar.value || selectEstado.value) {
             btnLimpiar.classList.remove('hidden');
         } else {
             btnLimpiar.classList.add('hidden');
@@ -129,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
         obtenerProductos(url);
     }
 
-    if (selectCategoria) selectCategoria.addEventListener('change', aplicarFiltros);
+    if (selectEstado) selectEstado.addEventListener('change', aplicarFiltros);
 
     if (inputBuscar) {
         let temporizador;

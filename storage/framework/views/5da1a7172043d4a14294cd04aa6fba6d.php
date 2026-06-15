@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('titulo', 'Categorías'); ?>
 
 <?php $__env->startSection('contenido'); ?>
@@ -62,20 +60,12 @@
                             Editar
                         </a>
 
-                        <form 
-                            action="/categorias/<?php echo e($categoria->id); ?>"
-                            method="POST"
-                        >
+                        <form action="/categorias/<?php echo e($categoria->id); ?>" method="POST" class="form-eliminar" >
                             <?php echo csrf_field(); ?>
                             <?php echo method_field('DELETE'); ?>
-
-                            <button 
-                                type="submit"
-                                class="px-3 py-1 bg-red-500/10 text-red-400 rounded border border-red-500/30 hover:bg-red-500/20 transition"
-                            >
+                            <button class="px-3 py-1.5 text-sm font-medium bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg border border-red-500/30 transition-colors flex items-center justify-center">
                                 Eliminar
                             </button>
-
                         </form>
 
                     </td>
@@ -97,6 +87,57 @@
     </table>
 
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        background: '#1a1a1a',
+        color: '#ffffff',
+        iconColor: '#25a5be',
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
+
+    <?php if(session('success')): ?>
+        Toast.fire({
+            icon: 'success',
+            title: '<?php echo e(session('success')); ?>'
+        });
+    <?php endif; ?>
+
+    const formularios = document.querySelectorAll('.form-eliminar');
+    
+    formularios.forEach(formulario => {
+        formulario.addEventListener('submit', function (e) {
+            e.preventDefault();
+            
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Esta acción borrará la categoría de forma permanente.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#f41e1e',
+                cancelButtonColor: '#303640',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+                background: '#121212',
+                color: '#ffffff'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit();
+                }
+            });
+        });
+    });
+});
+</script>
 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\USUARIO\Desktop\Aplicaciones Web\Boyz in the Sneaker\aplicaciones-web-laravel\resources\views/categorias/index.blade.php ENDPATH**/ ?>
