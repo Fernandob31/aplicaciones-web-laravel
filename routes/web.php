@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\ProductoApiController;
+use App\Http\Controllers\PromocionController;
 
 
 // Rutas de invitado (para loguearse)
@@ -49,12 +50,26 @@ Route::middleware(['auth', 'role:admin,gestor_productos'])->group(function () {
 // Grupa para acceder CRUD productos 
 Route::middleware(['auth', 'role:admin,gestor_productos,gestor_stock'])->group(function () {
     // Productos
-    // Route::resource('productos', ProductoController::class);   
     Route::get('/productos', [ProductoController::class, 'index']);
     Route::get('/productos/create', [ProductoController::class, 'create']);
     Route::post('/productos', [ProductoController::class, 'store']);
     Route::get('/productos/{id}', [ProductoController::class, 'show'])->name('productos.show');
+    Route::get('/promociones/productos-filtrados', [PromocionController::class, 'productosFiltrados'])->name('promociones.productos');
     Route::get('/productos/{id}/edit', [ProductoController::class, 'edit']);
     Route::put('/productos/{id}', [ProductoController::class, 'update']);
     Route::delete('/productos/{id}', [ProductoController::class, 'destroy']);
 });
+
+// Grupa para acceder CRUD promociones 
+Route::middleware(['auth', 'role:admin,gestor_stock'])->group(function () {
+    // Promociones
+    Route::get('/promociones', [PromocionController::class, 'index']);
+    Route::get('/promociones/create', [PromocionController::class, 'create']);
+    Route::post('/promociones', [PromocionController::class, 'store']);
+    Route::get('/promociones/{id}', [PromocionController::class, 'show'])->name('promociones.show');
+    //Route::get('/promociones/productos-filtrados', [PromocionController::class, 'productosFiltrados'])->name('promociones.productos');
+    Route::get('/promociones/{id}/edit', [PromocionController::class, 'edit']);
+    Route::put('/promociones/{id}', [PromocionController::class, 'update']);
+    Route::delete('/promociones/{id}', [PromocionController::class, 'destroy']);
+});
+

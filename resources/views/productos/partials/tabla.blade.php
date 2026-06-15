@@ -18,7 +18,25 @@
                 <td class="p-4 text-white font-medium">{{ $producto->modelo }}</td>
                 <td class="p-4 text-gray-300">{{ $producto->marca }}</td>
                 <td class="p-4 text-gray-300">{{ $producto->categoria->nombre }}</td>
-                <td class="p-4 text-[#25a5be] font-semibold">$ {{ number_format($producto->precio, 0, ',', '.') }}</td>
+                <td class="p-4 text-[#25a5be] font-semibold">
+                    @if($producto->tiene_descuento)
+                        <div class="flex flex-col">
+                            <span class="text-sm text-gray-500 line-through">
+                                $ {{ number_format($producto->precio, 0, ',', '.') }}
+                            </span>
+                            <span class="text-xs font-bold text-red-400">
+                                {{ $producto->descuento }}% OFF
+                            </span>
+                            <span class="text-[#25a5be] font-semibold">
+                                $ {{ number_format($producto->precio_final, 0, ',', '.') }}
+                            </span>
+                        </div>
+                    @else
+                        <span class="text-[#25a5be] font-semibold">
+                            $ {{ number_format($producto->precio, 0, ',', '.') }}
+                        </span>
+                    @endif
+                </td>
                 <td class="p-4 text-gray-300">{{ $producto->talles->sum('stock') }}</td>
                 <td class="p-4 text-gray-300">{{ $producto->genero }}</td>
                 <td class="p-4">

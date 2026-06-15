@@ -30,6 +30,13 @@
                     Categorías
                 </a>
             @endif
+
+            @if(in_array(auth()->user()->rol, ['admin', 'gestor_stock']))
+                <a href="/promociones"
+                class="block px-4 py-2 rounded-md transition {{ request()->is('promociones*') ? 'bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30' : 'hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent' }}">
+                    Promociones
+                </a>
+            @endif
             
             @if(auth()->user()->rol == 'admin')
                 <a href="/usuarios" 
