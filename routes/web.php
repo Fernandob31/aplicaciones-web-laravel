@@ -24,14 +24,14 @@ Route::get('/', function () {
 });
 
 // Api Publica
-Route::get('/api-public/productos', [ProductoApiController::class, 'index']);
-Route::get('/api-public/productos/{id}', [ProductoApiController::class, 'show']);
-Route::get('/api-public/categorias', [CategoriaApiController::class, 'index']);
-Route::get('/api-public/marcas', [ProductoApiController::class, 'marcas']);
+Route::get('/api-public/productos', [ProductoApiController::class, 'index'])->middleware('cors');
+Route::get('/api-public/productos/{id}', [ProductoApiController::class, 'show'])->middleware('cors');
+Route::get('/api-public/categorias', [CategoriaApiController::class, 'index'])->middleware('cors');
+Route::get('/api-public/marcas', [ProductoApiController::class, 'marcas'])->middleware('cors');
 //Ventas
-Route::post('/api-public/ventas', [VentaApiController::class, 'store']);
-Route::post('/api-public/pedidos', [PedidoApiController::class, 'store']);
-Route::post('/api-public/pedidos/webhook', [PedidoApiController::class, 'webhook']);
+Route::post('/api-public/ventas', [VentaApiController::class, 'store'])->middleware('cors');
+Route::post('/api-public/pedidos', [PedidoApiController::class, 'store'])->middleware('cors');
+Route::post('/api-public/pedidos/webhook', [PedidoApiController::class, 'webhook'])->middleware('cors');
 
 // Rutas protegidas (solo para usuarios que ya iniciaron sesión)
 Route::middleware('auth')->group(function () {
