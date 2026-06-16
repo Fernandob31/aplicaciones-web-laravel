@@ -41,7 +41,7 @@ class ProductoApiController extends Controller
             $productos->where('precio', '<=', $request->precio_max);
         }
 
-        $productos = $query->paginate(12);
+        $productos = $query->paginate($request->input('per_page', 12));
 
         return response()->json([
             'data' => $productos->map(function ($producto) {
