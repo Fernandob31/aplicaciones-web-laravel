@@ -14,8 +14,11 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('apellido');
             $table->string('email');
+            $table->string('telefono')->nullable();
+            $table->string('direccion')->nullable();
             $table->decimal('total', 10, 2);
-            $table->string('estado')->default('completada');
+            $table->string('estado')->default('pendiente');
+            $table->string('mp_payment_id')->nullable();    // ID de MP cuando se completa el pago
             $table->timestamps();
         });
     }

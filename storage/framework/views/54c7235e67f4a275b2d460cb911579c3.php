@@ -38,7 +38,26 @@
                             <span class="text-[#25a5be] text-sm font-bold tracking-widest uppercase"><?php echo e($producto->marca); ?></span>
                             <h1 class="text-4xl font-extrabold text-white mt-1"><?php echo e($producto->modelo); ?></h1>
                         </div>
-                        <p class="text-3xl font-light text-[#25a5be]">$<?php echo e(number_format($producto->precio, 0, ',', '.')); ?></p>
+                        <div class="text-right">
+                            <?php if($producto->tiene_descuento): ?>
+                                <p class="text-sm text-gray-500 line-through">
+                                    $<?php echo e(number_format($producto->precio, 0, ',', '.')); ?>
+
+                                </p>
+                                <p class="text-sm font-bold text-red-400">
+                                    <?php echo e($producto->descuento); ?>% OFF
+                                </p>
+                                <p class="text-3xl font-light text-[#25a5be]">
+                                    $<?php echo e(number_format($producto->precio_final, 0, ',', '.')); ?>
+
+                                </p>
+                            <?php else: ?>
+                                <p class="text-3xl font-light text-[#25a5be]">
+                                    $<?php echo e(number_format($producto->precio, 0, ',', '.')); ?>
+
+                                </p>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
 

@@ -38,7 +38,7 @@ class ProductoApiController extends Controller
             $query->where('precio', '>=', $request->precio_min);
         }
         if ($request->filled('precio_max')) {
-            $productos->where('precio', '<=', $request->precio_max);
+            $query->where('precio', '<=', $request->precio_max);
         }
 
         $productos = $query->paginate(12);

@@ -13,14 +13,16 @@ use App\Models\ProductoTalle;
 
 class VentaApiController extends Controller
 {
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
             'email' => 'required|email|max:255',
+            'telefono' => 'required|string|max:50',
+            'direccion' => 'required|string|max:255',
             'items' => 'required|array|min:1',
             'items.*.producto_id' => 'required|exists:productos,id',
+            'items.*.talle'         => 'required|string',
             'items.*.cantidad' => 'required|integer|min:1',
         ]);
 
@@ -33,8 +35,10 @@ class VentaApiController extends Controller
                     'nombre' => $request->nombre,
                     'apellido' => $request->apellido,
                     'email' => $request->email,
+                    'telefono'      => $request->telefono,
+                    'direccion'     => $request->direccion,
                     'total' => 0,
-                    'estado' => 'completada',
+                    'estado' => 'pendiente',
                 ]);
 
                 $totalVenta = 0;
@@ -43,21 +47,23 @@ class VentaApiController extends Controller
                     $producto = Producto::findOrFail($item['producto_id']);
                     $productoTalle = null;
 
-                    if (isset($item['producto_talle_id'])) {
-                        $productoTalle = ProductoTalle::find($item['producto_talle_id']);
-                    } elseif (isset($item['talle_id'])) {
-                        $productoTalle = ProductoTalle::where('producto_id', $item['producto_id'])
-                            ->where('talle_id', $item['talle_id'])
-                            ->first();
-                    }
+                    // Buscar por producto_id y talle directo
+                    $productoTalle = ProductoTalle::where('producto_id', $item['producto_id'])
+                        ->where('talle', $item['talle'])
+                        ->first();
 
                     if (!$productoTalle || $productoTalle->stock < $item['cantidad']) {
-                        throw new \Exception("Stock insuficiente para el modelo: {$producto->modelo}");
+                        throw new \Exception("Stock insuficiente para {$producto->marca} {$producto->modelo} talle {$item['talle']}");
                     }
 
                     $productoTalle->decrement('stock', $item['cantidad']);
 
-                    $subtotal = $producto->precio * $item['cantidad'];
+                    // Aplicamos descuento si tiene 
+                    $precioUnitario = $producto->descuento > 0
+                        ? round($producto->precio * (1 - $producto->descuento / 100))
+                        : $producto->precio;
+                    
+                    $subtotal = $precioUnitario * $item['cantidad'];
                     $totalVenta += $subtotal;
 
                     DetalleVenta::create([
@@ -77,6 +83,7 @@ class VentaApiController extends Controller
 
             return response()->json([
                 'success' => true,
+                'pedido_id'     => $resultado->id,
                 'message' => 'Venta procesada con éxito',
                 'codigo_compra' => $resultado->codigo_compra,
                 'total' => $resultado->total

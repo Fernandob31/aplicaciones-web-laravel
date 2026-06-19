@@ -10,7 +10,7 @@
 
     <aside class="w-64 bg-[#121212] border-r border-[#25a5be]/20 flex flex-col shadow-[4px_0_15px_rgba(0,0,0,0.5)] z-10">
         <div class="h-16 flex items-center justify-center border-b border-[#25a5be]/20">
-            <span class="text-xl font-bold text-[#25a5be] tracking-widest uppercase shadow-cyan-500/50">Boyz Sneaker</span>
+            <span class="text-x2 font-bold text-[#25a5be] tracking-widest uppercase shadow-cyan-500/50">Boyz in the Sneaker</span>
         </div>
         
         <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
@@ -39,8 +39,13 @@
             <?php endif; ?>
             
             <?php if(auth()->user()->rol == 'admin'): ?>
+                <a href="/ventas" 
+                class="block px-4 py-2 rounded-md transition <?php echo e(request()->is('ventas*') ? 'bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30' : 'hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent'); ?>">
+                    Facturación y Ventas
+                </a>
+
                 <a href="/usuarios" 
-                class="block px-4 py-2 rounded-md transition hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent">
+                class="block px-4 py-2 rounded-md transition <?php echo e(request()->is('usuarios*') ? 'bg-[#25a5be]/10 text-[#25a5be] font-medium border border-[#25a5be]/30' : 'hover:bg-[#1a1a1a] text-gray-400 hover:text-gray-200 border border-transparent'); ?>">
                     Gestión de Usuarios
                 </a>
             <?php endif; ?>
