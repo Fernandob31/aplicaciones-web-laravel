@@ -102,11 +102,14 @@ class PedidoApiController extends Controller
                         'email'   => $request->email,
                     ],
                     'back_urls'           => [
-                        'success' => env('FRONTEND_URL') . '/pago/exitoso',
-                        'failure' => env('FRONTEND_URL') . '/pago/fallido',
-                        'pending' => env('FRONTEND_URL') . '/pago/exitoso',
+                        'success' => env('FRONTEND_URL', 'https://aplicaciones-web-react.vercel.app') . '/pago/exitoso',
+                        'failure' => env('FRONTEND_URL', 'https://aplicaciones-web-react.vercel.app') . '/pago/fallido',
+                        'pending' => env('FRONTEND_URL', 'https://aplicaciones-web-react.vercel.app') . '/pago/exitoso',
+                        //'success' => 'http://localhost:5173/pago/exitoso',
+                        //'failure' => 'http://localhost:5173/pago/fallido',
+                        //'pending' => 'http://localhost:5173/pago/exitoso',
                     ],
-                    'auto_return'         => 'approved',
+                    // 'auto_return'         => 'approved',
                     'external_reference'  => $codigoCompra,
                 ]);
 
@@ -126,11 +129,15 @@ class PedidoApiController extends Controller
             ], 201);
 
         } catch (MPApiException $e) {
+            \Log::error('MP API Error: ' . $e->getMessage()); //
+            \Log::error('MP API Response: ' . json_encode($e->getApiResponse()->getContent())); //
             return response()->json([
                 'success' => false,
-                'message' => 'Error con MercadoPago: ' . $e->getMessage()
+                'message' => 'Error con MercadoPago: ' . $e->getMessage(),
+                'detail' => $e->getApiResponse()->getContent() //
             ], 400);
         } catch (\Exception $e) {
+            \Log::error('Error general: ' . $e->getMessage());  //
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
