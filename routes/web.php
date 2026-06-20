@@ -10,6 +10,7 @@ use App\Http\Controllers\PromocionController;
 use App\Http\Controllers\Api\ProductoApiController;
 use App\Http\Controllers\Api\VentaApiController;
 use App\Http\Controllers\Api\CategoriaApiController;
+use App\Http\Controllers\Api\PedidoApiController;
 use App\Http\Controllers\VentaController;
 
 
@@ -32,6 +33,9 @@ Route::get('/api-public/marcas', [ProductoApiController::class, 'marcas'])->midd
 Route::post('/api-public/ventas', [VentaApiController::class, 'store'])->middleware('cors');
 Route::post('/api-public/pedidos', [PedidoApiController::class, 'store'])->middleware('cors');
 Route::post('/api-public/pedidos/webhook', [PedidoApiController::class, 'webhook'])->middleware('cors');
+Route::options('/api-public/{any}', function() {
+    return response('', 200);
+})->where('any', '.*')->middleware('cors');
 
 // Rutas protegidas (solo para usuarios que ya iniciaron sesión)
 Route::middleware('auth')->group(function () {
