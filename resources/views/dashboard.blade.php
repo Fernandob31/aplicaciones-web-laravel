@@ -9,7 +9,7 @@
         Dashboard
     </h1>
 
-    @if(auth()->user()->rol == 'admin' || auth()->user()->rol == 'gestor_productos')
+    @if(auth()->user()->rol == 'admin')
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="bg-[#121212]/80 p-6 rounded-xl border border-gray-800 shadow-lg">
                 <p class="text-gray-400 text-sm uppercase tracking-wider font-semibold mb-2">Ventas de Hoy</p>

@@ -28,7 +28,7 @@ class PromocionController extends Controller
             );
         }
 
-        $promociones = $query->latest()->paginate(10);
+        $promociones = $query->latest()->paginate(10)->withQueryString();
 
         if ($request->ajax()) {
             return view('promociones.partials.tabla', compact('promociones'))->render();

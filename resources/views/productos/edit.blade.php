@@ -197,10 +197,18 @@
                     
                     <div class="grid grid-cols-4 gap-2 overflow-y-auto h-20 p-2 bg-black/20 rounded-lg border border-gray-800">
                         @foreach($producto->imagenes as $foto)
-                            <div class="aspect-square rounded-lg overflow-hidden border border-gray-800">
+                            <div id="box-foto-{{ $foto->id }}" class="relative aspect-square rounded-lg overflow-hidden border border-gray-800 group">
                                 <img src="{{ $foto->url_imagen }}" class="w-full h-full object-cover">
+                                
+                                {{-- Botón para quitar (solo visible si no sos gestor_stock) --}}
+                                @if(auth()->user()->rol != 'gestor_stock')
+                                    <button type="button" onclick="eliminarFoto({{ $foto->id }})" class="absolute top-1 right-1 bg-red-600/80 hover:bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-all backdrop-blur-sm shadow-md">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                    </button>
+                                @endif
                             </div>
                         @endforeach
+                        
                         @if($producto->imagenes->count() == 0)
                             <div class="col-span-4 text-center text-gray-600 text-xs py-3 italic">No hay fotos adicionales guardadas</div>
                         @endif
@@ -375,6 +383,34 @@ document.getElementById('input-galeria').addEventListener('change', function(e) 
         placeholder.classList.remove('hidden');
     }
 });
+
+function eliminarFoto(id) {
+    Swal.fire({
+        title: '¿Quitar imagen?',
+        text: "Se eliminará definitivamente al guardar los cambios del producto.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#f41e1e',
+        cancelButtonColor: '#303640',
+        confirmButtonText: 'Sí, quitar',
+        cancelButtonText: 'Cancelar',
+        background: '#121212',
+        color: '#ffffff'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // 1. Ocultamos la miniatura visualmente
+            document.getElementById('box-foto-' + id).style.display = 'none';
+            
+            // 2. Insertamos el ID en el formulario para que el backend sepa cuál borrar
+            const form = document.querySelector('form');
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'eliminar_imagenes[]';
+            input.value = id;
+            form.appendChild(input);
+        }
+    });
+}   
 </script>
 
 @endsection

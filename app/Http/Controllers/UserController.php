@@ -8,9 +8,20 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $usuarios = User::all();
+        $query = User::query();
+
+        if ($request->filled('buscar')) {
+            $query->where('username', 'like', '%' . $request->buscar . '%');
+        }
+
+        $usuarios = $query->orderBy('id', 'desc')->paginate(10)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('usuarios.partials.tabla', compact('usuarios'))->render();
+        }
+
         return view('usuarios.index', compact('usuarios'));
     }
     
