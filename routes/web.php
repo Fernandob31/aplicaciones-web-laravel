@@ -10,6 +10,7 @@ use App\Http\Controllers\PromocionController;
 use App\Http\Controllers\Api\ProductoApiController;
 use App\Http\Controllers\Api\VentaApiController;
 use App\Http\Controllers\Api\CategoriaApiController;
+use App\Http\Controllers\Api\PedidoApiController;
 use App\Http\Controllers\VentaController;
 
 
@@ -24,6 +25,10 @@ Route::get('/', function () {
 });
 
 // Api Publica
+Route::options('/api-public/{any}', function() {
+    return response('', 200);
+})->where('any', '.*')->middleware('cors');
+
 Route::get('/api-public/productos', [ProductoApiController::class, 'index'])->middleware('cors');
 Route::get('/api-public/productos/{id}', [ProductoApiController::class, 'show'])->middleware('cors');
 Route::get('/api-public/categorias', [CategoriaApiController::class, 'index'])->middleware('cors');

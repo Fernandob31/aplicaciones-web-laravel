@@ -70,7 +70,7 @@ class DashboardController extends Controller
             }
         }
 
-        if ($rol === 'gestor_stock') {
+        if ($rol === 'gestor_stock') {   
             $totalProductosDisponibles = ProductoTalle::sum('stock');
         }
 

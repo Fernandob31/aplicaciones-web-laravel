@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('titulo', 'Crear Categoría'); ?>
 
 <?php $__env->startSection('contenido'); ?>

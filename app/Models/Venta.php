@@ -14,8 +14,11 @@ class Venta extends Model
         'nombre',
         'apellido',
         'email',
+        'telefono',
+        'direccion',
         'total',
         'estado',
+        'my_parment_id',
     ];
 
     // Una venta tiene muchos detalles
