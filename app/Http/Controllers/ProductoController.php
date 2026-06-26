@@ -236,6 +236,16 @@ class ProductoController extends Controller
                 ]);
             }
         }
+        if ($request->has('eliminar_imagenes') && is_array($request->eliminar_imagenes)) {
+            $imagenesAEliminar = ImagenProducto::whereIn('id', $request->eliminar_imagenes)
+                ->where('producto_id', $producto->id)
+                ->get();
+
+            foreach ($imagenesAEliminar as $img) {
+                // Se borra el registro de la base de datos
+                $img->delete();
+            }
+        }
         return redirect('/productos/' . $producto->id)->with('success', 'Producto actualizado correctamente');
     }
 

@@ -23,6 +23,14 @@
                 <p class="text-gray-200">{{ $venta->email }}</p>
             </div>
             <div>
+                <p class="text-gray-500 uppercase tracking-wider text-xs font-bold mb-1">Telefono</p>
+                <p class="text-gray-200">{{ $venta->telefono }}</p>
+            </div>
+            <div>
+                <p class="text-gray-500 uppercase tracking-wider text-xs font-bold mb-1">Dirección</p>
+                <p class="text-gray-200">{{ $venta->direccion }}</p>
+            </div>
+             <div>
                 <p class="text-gray-500 uppercase tracking-wider text-xs font-bold mb-1">Fecha de Transacción</p>
                 <p class="text-gray-200">{{ $venta->created_at->format('d/m/Y H:i:s') }}</p>
             </div>

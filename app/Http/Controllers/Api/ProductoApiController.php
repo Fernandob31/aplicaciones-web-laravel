@@ -13,6 +13,10 @@ class ProductoApiController extends Controller
     public function index(Request $request) {
         $query = Producto::with(['categoria', 'talles', 'imagenes']);
 
+        if ($request->boolean('con_descuento')) {
+            $query->where('descuento', '>', 0);
+        }
+
         // Búsqueda por texto libre
         if ($request->filled('busqueda')) {
             $busqueda = $request->busqueda;
