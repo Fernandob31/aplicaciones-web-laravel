@@ -7,9 +7,19 @@ use App\Models\Categoria;
 
 class CategoriaController extends Controller
 {
-    public function index() {
-        $categorias = Categoria::all(); // Traemos todas las categoras de la BD
-        // compact(...) envia esa variable a la vista
+    public function index(Request $request) {
+        $query = Categoria::query();
+
+        if ($request->filled('buscar')) {
+            $query->where('nombre', 'like', '%' . $request->buscar . '%');
+        }
+
+        $categorias = $query->orderBy('id', 'desc')->paginate(10)->withQueryString();
+
+        if ($request->ajax()) {
+            return view('categorias.partials.tabla', compact('categorias'))->render();
+        }
+
         return view('categorias.index', compact('categorias')); 
     }
 

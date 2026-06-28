@@ -1,7 +1,7 @@
 <div class="overflow-x-auto">
     <table class="w-full text-left border-collapse">
-        <thead>
-            <tr class="border-b border-gray-800 bg-black/20 text-gray-400 text-xs uppercase tracking-wider font-bold">
+        <thead class="border-b border-gray-800 bg-black/20 text-gray-400 text-xs uppercase tracking-wider font-bold">
+            <tr>
                 <th class="px-6 py-4">Código de Compra</th>
                 <th class="px-6 py-4">Fecha</th>
                 <th class="px-6 py-4">Cliente</th>
@@ -19,10 +19,13 @@
                         <span class="block text-xs text-gray-500">{{ $venta->email }}</span>
                     </td>
                     <td class="px-6 py-4 font-bold text-white">${{ number_format($venta->total, 2) }}</td>
-                    <td class="px-6 py-4 text-center align-middle">
-                        <a href="{{ route('ventas.show', $venta->id) }}" class="inline-flex items-center justify-center px-3 py-1 text-xs font-bold bg-[#25a5be]/10 text-[#25a5be] rounded border border-[#25a5be]/30 hover:bg-[#25a5be]/20 transition-colors whitespace-nowrap">
-                            Ver detalle
-                        </a>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center justify-center gap-2">
+                            <a href="{{ route('ventas.show', $venta->id) }}" 
+                               class="px-3 py-1.5 text-sm font-medium bg-[#25a5be]/10 text-[#25a5be] rounded-lg border border-[#25a5be]/30 hover:bg-[#25a5be]/20 transition-colors flex items-center justify-center">
+                                Ver Detalles
+                            </a>
+                        </div>
                     </td>
                 </tr>
             @empty
@@ -36,8 +39,12 @@
     </table>
 </div>
 
-@if($ventas->hasPages())
-    <div class="p-4 border-t border-gray-800 bg-black/10">
-        {{ $ventas->links() }}
+
+    <div id="pagination-container" class="bg-[#1a1a1a] p-4 border-t border-gray-800 flex justify-between items-center text-sm text-gray-400">
+        <div>
+            Mostrando registros del {{ $ventas->firstItem() ?? 0 }} al {{ $ventas->lastItem() ?? 0 }} de un total de {{ $ventas->total() }}
+        </div>
+        <div class="flex enlaces-paginacion">
+            {{ $ventas->links() }}
+        </div>
     </div>
-@endif
