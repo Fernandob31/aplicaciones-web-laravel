@@ -147,9 +147,12 @@ class PedidoApiController extends Controller
 
     public function webhook(Request $request)
     {
+        \Log::info('Webhook MP recibido', $request->all()); #
+
         $paymentId = $request->input('data.id');
 
         if (!$paymentId) {
+            \Log::info('Webhook sin payment_id');   #
             return response()->json(['ok' => true]);
         }
 
@@ -166,7 +169,7 @@ class PedidoApiController extends Controller
 
             if ($venta) {
                 $nuevoEstado = match($estado) {
-                    'approved' => 'completada',
+                    'approved' => 'pagado',
                     'rejected' => 'rechazada',
                     default    => 'pendiente',
                 };
