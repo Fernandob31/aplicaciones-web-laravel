@@ -17,7 +17,6 @@
 <div class="bg-[#121212]/80 p-4 rounded-lg border border-gray-800 shadow-lg mb-6">
     <form id="form-filtros" action="{{ url('/promociones') }}" method="GET" class="flex flex-col md:flex-row gap-4">
 
-        {{-- Buscador por texto --}}
         <div class="flex-1">
             <input 
                 type="text" 
@@ -30,7 +29,6 @@
             >
         </div>
 
-        {{-- Filtro por Estado --}}
         <div class="w-full md:w-48">
             <select id="select-estado" name="estado" class="w-full bg-[#1a1a1a] border border-gray-700 rounded-lg px-4 py-2.5 text-white text-sm focus:border-[#25a5be] focus:ring-1 focus:ring-[#25a5be]">
                 <option value=""> Todos los estados </option>
@@ -39,7 +37,6 @@
             </select>
         </div>
 
-        {{-- Botones de Acción --}}
         <div class="flex gap-2">
             <a href="{{ url('/promociones') }}" id="btn-limpiar" class="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-semibold rounded-lg border border-gray-700 transition-colors flex items-center {{ request()->anyFilled(['buscar', 'estado']) ? '' : 'hidden' }}">
                 Limpiar
@@ -50,8 +47,6 @@
 </div>
 
 <div class="bg-[#121212]/80 rounded-lg border border-gray-800 shadow-lg overflow-hidden relative">
-    
-    {{-- Spinner de carga invisible por defecto --}}
     <div id="loading-overlay" class="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center hidden z-20">
         <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-[#25a5be]"></div>
     </div>
@@ -70,10 +65,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnLimpiar = document.getElementById('btn-limpiar');
     const loading = document.getElementById('loading-overlay');    
     
-    // Variable para recordar en qué página exacta estamos
     let urlActual = window.location.href;
 
-    // --- CONFIGURACIÓN DEL TOAST (Swal.mixin) ---
     const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -89,6 +82,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    @if(session('success'))
+        Toast.fire({ icon: 'success', title: '{{ session('success') }}' });
+    @endif
+
+    @if(session('error'))
+        Toast.fire({ icon: 'error', title: '{{ session('error') }}' });
+    @endif
+
     function obtenerPromociones(url) {
         urlActual = url;
         loading.classList.remove('hidden');
@@ -102,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(html => {
             container.innerHTML = html;
             loading.classList.add('hidden');
-            inicializarEventosEliminar(); // Re-vincula los eventos a la nueva tabla
+            inicializarEventosEliminar();
         })
         .catch(error => {
             console.error('Error:', error);
@@ -115,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const params = new URLSearchParams(formData).toString();
         const url = `${form.action}?${params}`;
         
-        // Mostrar u ocultar el botón Limpiar
         if (inputBuscar.value || selectEstado.value) {
             btnLimpiar.classList.remove('hidden');
         } else {
@@ -125,10 +125,8 @@ document.addEventListener('DOMContentLoaded', function () {
         obtenerPromociones(url);
     }
 
-    // Disparar cuando se cambie el select
     if (selectEstado) selectEstado.addEventListener('change', aplicarFiltros);
 
-    // Disparar mientras se escribe (con un pequeño delay para no saturar el servidor)
     if (inputBuscar) {
         let temporizador;
         inputBuscar.addEventListener('input', function() {
@@ -137,7 +135,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Paginación asíncrona (Event Delegation)
     container.addEventListener('click', function(e) {
         const enlacePaginacion = e.target.closest('.enlaces-paginacion a');
         if (enlacePaginacion) {
@@ -146,7 +143,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // --- FUNCIÓN DE ELIMINACIÓN ASÍNCRONA ---
     function inicializarEventosEliminar() {
         const formularios = document.querySelectorAll('.form-eliminar');
         

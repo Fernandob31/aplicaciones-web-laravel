@@ -1,16 +1,16 @@
 @extends('layouts.admin')
 
-@section('titulo', 'Crear Producto')
+@section('titulo', 'Productos')
 
 @section('contenido')
+<div class="max-w-5xl mx-auto">
 
-<div class="max-w-4xl">
-
-    <h1 class="text-3xl font-bold text-white mb-6">
-        Nuevo Producto
-    </h1>
-    <div class="bg-[#121212]/80 p-6 rounded-lg border border-gray-800 shadow-lg">
-
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-white">Nuevo Producto</h1>
+        <p class="text-gray-400 mt-1">Añade un nuevo par de zapatillas al catálogo de la tienda.</p>
+    </div>
+    
+    <div class="bg-[#121212]/80 p-6 rounded-xl border border-gray-800 shadow-lg">
         <form action="/productos" method="POST" enctype="multipart/form-data">
 
             @csrf

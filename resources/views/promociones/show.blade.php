@@ -1,13 +1,17 @@
 @extends('layouts.admin')
 
-@section('titulo', 'Detalle de Promocion')
+@section('titulo', 'Promociones')
 
 @section('contenido')
 <div class="max-w-7xl mx-auto">
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-white"> {{ $promocion->nombre }} </h1>
+    
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-white">{{ $promocion->nombre }}</h1>
+        <a href="/promociones" class="px-4 py-2 bg-[#1a1a1a] hover:bg-gray-800 text-gray-300 hover:text-white border border-gray-700 rounded-lg transition-all text-sm font-semibold flex items-center gap-2 shadow-sm">
+            &larr; Volver al listado
+        </a>
     </div>
-    {{-- Resumen --}}
+
     <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
         <div class="bg-[#121212]/80 border border-gray-800 rounded-xl p-4">
             <p class="text-gray-400 text-sm">Tipo</p>
@@ -31,7 +35,6 @@
         </div>
     </div>
 
-    {{-- Productos --}}
     <div class="bg-[#121212]/80 border border-gray-800 rounded-xl overflow-hidden">
         <div class="p-6 border-b border-gray-800">
             <h2 class="text-xl font-bold text-white"> Productos afectados </h2>
@@ -63,38 +66,37 @@
         </table>
     </div>
 
-    <div class="mt-8 flex gap-4">
-        <a href="/promociones/{{ $promocion->id }}/edit" class="flex-1 bg-[#25a5be] hover:bg-[#1d8fa6] text-black font-bold py-4 rounded-xl text-center">
-            Editar Promoción
-        </a>
-        <a href="/promociones" class="px-8 py-4 border border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800 rounded-xl text-center">
-            Volver
-        </a>
-    </div>
+    @if($promocion->estado == 'activa')
+        <div class="mt-8 flex gap-4">
+            <a href="/promociones/{{ $promocion->id }}/edit" class="flex-1 bg-[#25a5be] hover:bg-[#1d8fa6] text-black font-bold py-4 rounded-xl text-center shadow-[0_0_20px_rgba(37,165,190,0.2)] transition-all">
+                Editar Promoción
+            </a>
+        </div>
+    @endif
 </div>
 @endsection
-@if(session('success'))
+
+@if(session('success') || session('error'))
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
-                timer: 3000, // Desaparece a los 3 segundos
+                timer: 3000,
                 timerProgressBar: true,
-                background: '#1a1a1a', // Fondo oscuro del panel
-                color: '#ffffff',      // Texto blanco
-                iconColor: '#25a5be',  // Color de acento
+                background: '#1a1a1a',
+                color: '#ffffff',
+                iconColor: '{{ session("error") ? "#f41e1e" : "#25a5be" }}',
                 didOpen: (toast) => {
                     toast.addEventListener('mouseenter', Swal.stopTimer)
                     toast.addEventListener('mouseleave', Swal.resumeTimer)
                 }
             });
 
-            // Disparamos el cartel usando el mensaje que mandó el Controlador
             Toast.fire({
-                icon: 'success',
-                title: '{{ session('success') }}'
+                icon: '{{ session("error") ? "error" : "success" }}',
+                title: '{{ session("error") ?? session("success") }}'
             });
         });
     </script>

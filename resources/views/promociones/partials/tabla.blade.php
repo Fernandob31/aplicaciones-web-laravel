@@ -34,23 +34,28 @@
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex items-center justify-center gap-2">
-                            <a href="/promociones/{{ $promocion->id }}" 
-                               class="px-3 py-1.5 text-sm font-medium bg-[#25a5be]/10 text-[#25a5be] rounded-lg border border-[#25a5be]/30 hover:bg-[#25a5be]/20 transition-colors flex items-center justify-center">
-                                Ver Detalles
-                            </a>
+                        <a href="/promociones/{{ $promocion->id }}" 
+                        class="px-3 py-1.5 text-sm font-medium bg-[#25a5be]/10 text-[#25a5be] rounded-lg border border-[#25a5be]/30 hover:bg-[#25a5be]/20 transition-colors flex items-center justify-center">
+                            Ver Detalles
+                        </a>
+                        
+                        {{-- Condición para ocultar el botón si está finalizada --}}
+                        @if($promocion->estado == 'activa')
                             <a href="/promociones/{{ $promocion->id }}/edit" 
-                               class="px-3 py-1.5 text-sm font-medium bg-yellow-500/10 text-yellow-400 rounded-lg border border-yellow-500/30 hover:bg-yellow-500/20 transition-colors flex items-center justify-center">
+                            class="px-3 py-1.5 text-sm font-medium bg-yellow-500/10 text-yellow-400 rounded-lg border border-yellow-500/30 hover:bg-yellow-500/20 transition-colors flex items-center justify-center">
                                 Editar
                             </a>
-                            <form action="/promociones/{{ $promocion->id }}" method="POST" class="form-eliminar flex m-0"> 
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" 
-                                        class="px-3 py-1.5 text-sm font-medium bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg border border-red-500/30 transition-colors flex items-center justify-center">
-                                    Eliminar
-                                </button>
-                            </form>
-                        </div>
+                        @endif
+
+                        <form action="/promociones/{{ $promocion->id }}" method="POST" class="form-eliminar flex m-0"> 
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" 
+                                    class="px-3 py-1.5 text-sm font-medium bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg border border-red-500/30 transition-colors flex items-center justify-center">
+                                Eliminar
+                            </button>
+                        </form>
+                    </div>
                     </td>
                 </tr>
             @empty

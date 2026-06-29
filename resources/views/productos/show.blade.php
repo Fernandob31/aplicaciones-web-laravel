@@ -20,7 +20,7 @@
             
             @if($producto->imagenes->count() > 0)
             <div>
-                <h3 class="text-gray-400 text-xs uppercase tracking-widest mb-3">Galería de Fotos</h3>
+                <h3 class="text-gray-400 text-xs uppercase tracking-widest mb-3 font-bold">Galería de Fotos</h3>
                 <div class="grid grid-cols-4 gap-4">
                     @foreach($producto->imagenes as $foto)
                     <div class="aspect-square rounded-lg overflow-hidden border border-gray-800 hover:border-[#25a5be] transition-colors cursor-pointer bg-black/20">
@@ -34,6 +34,7 @@
 
         <div class="flex flex-col justify-between">
             <div class="space-y-8">
+                
                 <div>
                     <div class="flex justify-between items-start mb-4">
                         <div>
@@ -60,51 +61,47 @@
                     </div>
                 </div>
 
-            <div class="mt-4">
-                <h3 class="text-sm font-semibold text-gray-400 mb-2">Colores Disponibles:</h3>
-                
-                <div class="flex flex-wrap gap-3">
-                    @foreach($producto->colores as $color)
-                        <div class="flex items-center gap-2 bg-[#1a1a1a] px-3 py-1.5 rounded-full border border-gray-700 shadow-sm">
-                            
-                            <span 
-                                class="w-4 h-4 rounded-full border border-gray-500/50" 
-                                style="background-color: {{ $color }};"
-                            ></span>
-                            
-                            <span class="text-sm text-gray-300 font-mono">
-                                {{ strtoupper($color) }}
-                            </span>
-                            
+                <div class="mt-8 space-y-8 border-t border-gray-800/60 pt-8">
+                    
+                    <div>
+                        <h3 class="text-gray-400 text-xs uppercase tracking-widest mb-4 font-bold">Colores Disponibles</h3>
+                        <div class="flex flex-wrap gap-3">
+                            @foreach($producto->colores as $color)
+                                <div class="flex items-center gap-2 bg-[#1a1a1a] px-3 py-1.5 rounded-full border border-gray-700 shadow-sm">
+                                    <span class="w-4 h-4 rounded-full border border-gray-500/50" style="background-color: {{ $color }};"></span>
+                                    <span class="text-sm text-gray-300 font-mono">{{ strtoupper($color) }}</span>
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
-                </div>
-
-                <div>
-                    <h3 class="text-gray-400 text-xs uppercase tracking-widest mb-3">Descripción</h3>
-                    <p class="text-gray-300 leading-relaxed">{{ $producto->descripcion }}</p>
-                </div>
-
-                <div>
-                    <h3 class="text-gray-400 text-xs uppercase tracking-widest mb-4">Stock por Talle</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        @foreach($producto->talles as $item)
-                        <div class="flex items-center justify-between bg-[#1a1a1a] border {{ $item->stock > 0 ? 'border-gray-800' : 'border-red-900/30' }} p-4 rounded-xl">
-                            <div class="flex items-center gap-3">
-                                <span class="text-[#25a5be] font-bold text-lg">Talle {{ $item->talle }}</span>
-                            </div>
-                            <div class="text-right">
-                                @if($item->stock > 0)
-                                    <span class="text-white font-medium block">{{ $item->stock }} unidades</span>
-                                    <span class="text-[10px] text-green-500 uppercase tracking-tighter">Disponible</span>
-                                @else
-                                    <span class="text-gray-600 font-medium block">Sin stock</span>
-                                    <span class="text-[10px] text-red-500 uppercase tracking-tighter">Agotado</span>
-                                @endif
-                            </div>
-                        </div>
-                        @endforeach
                     </div>
+
+                    <div>
+                        <h3 class="text-gray-400 text-xs uppercase tracking-widest mb-3 font-bold">Descripción</h3>
+                        <p class="text-gray-300 leading-relaxed">{{ $producto->descripcion }}</p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-gray-400 text-xs uppercase tracking-widest mb-4 font-bold">Stock por Talle</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            @foreach($producto->talles as $item)
+                            <div class="flex items-center justify-between bg-[#1a1a1a] border {{ $item->stock > 0 ? 'border-gray-800' : 'border-red-900/30' }} p-4 rounded-xl">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-[#25a5be] font-bold text-lg">Talle {{ $item->talle }}</span>
+                                </div>
+                                <div class="text-right">
+                                    @if($item->stock > 0)
+                                        <span class="text-white font-medium block">{{ $item->stock }} unidades</span>
+                                        <span class="text-[10px] text-green-500 uppercase tracking-tighter">Disponible</span>
+                                    @else
+                                        <span class="text-gray-600 font-medium block">Sin stock</span>
+                                        <span class="text-[10px] text-red-500 uppercase tracking-tighter">Agotado</span>
+                                    @endif
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -120,6 +117,7 @@
     </div>
 </div>
 @endsection
+
 @if(session('success'))
     <script>
         document.addEventListener('DOMContentLoaded', function () {
