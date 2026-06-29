@@ -1,22 +1,17 @@
 @extends('layouts.admin')
 
-@section('titulo', 'Editar Producto')
+@section('titulo', 'Productos')
 
 @section('contenido')
+<div class="max-w-5xl mx-auto">
 
-<div class="max-w-4xl">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-white">Editar Producto</h1>
+        <p class="text-gray-400 mt-1">Actualiza la información, el stock o las imágenes del producto.</p>
+    </div>
 
-    <h1 class="text-3xl font-bold text-white mb-6">
-        Editar Producto
-    </h1>
-
-    <div class="bg-[#121212]/80 p-6 rounded-lg border border-gray-800 shadow-lg">
-
-        <form 
-            action="/productos/{{ $producto->id }}"
-            method="POST"
-            enctype="multipart/form-data"
-        >
+    <div class="bg-[#121212]/80 p-6 rounded-xl border border-gray-800 shadow-lg">
+        <form id="form-editar-producto" action="/productos/{{ $producto->id }}" method="POST" enctype="multipart/form-data">
 
             @csrf
             @method('PUT')
@@ -340,6 +335,7 @@ function agregarTalle() {
         .getElementById('contenedor-talles')
         .insertAdjacentHTML('beforeend', html);
 }
+
 document.getElementById('input-principal').addEventListener('change', function(e) {
     const file = e.target.files[0];
     const containerPreview = document.getElementById('container-preview-principal');
@@ -401,8 +397,8 @@ function eliminarFoto(id) {
             // 1. Ocultamos la miniatura visualmente
             document.getElementById('box-foto-' + id).style.display = 'none';
             
-            // 2. Insertamos el ID en el formulario para que el backend sepa cuál borrar
-            const form = document.querySelector('form');
+            // 2. Insertamos el ID en el formulario exacto usando el ID
+            const form = document.getElementById('form-editar-producto');
             const input = document.createElement('input');
             input.type = 'hidden';
             input.name = 'eliminar_imagenes[]';

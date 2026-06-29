@@ -6,8 +6,8 @@
 <div class="max-w-5xl mx-auto">
     <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold text-white">Factura: <span class="text-[#25a5be]">{{ $venta->codigo_compra }}</span></h1>
-        <a href="{{ route('ventas.index') }}" class="text-gray-400 hover:text-white transition-colors text-sm font-semibold flex items-center gap-2">
-            ← Volver al listado
+        <a href="{{ route('ventas.index') }}" class="px-4 py-2 bg-[#1a1a1a] hover:bg-gray-800 text-gray-300 hover:text-white border border-gray-700 rounded-lg transition-all text-sm font-semibold flex items-center gap-2 shadow-sm">
+            &larr; Volver al listado
         </a>
     </div>
 

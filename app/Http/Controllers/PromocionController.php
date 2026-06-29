@@ -134,8 +134,25 @@ class PromocionController extends Controller
         return view('promociones.show', compact('promocion'));
     }
 
+    public function edit($id) {
+        $promocion = Promocion::with('productos')->findOrFail($id);
+        
+        // BLOQUEO: Si está finalizada, lo mandamos de vuelta al listado con un error
+        if ($promocion->estado == 'finalizada') {
+            return redirect('/promociones')->with('error', 'No se puede modificar una promoción que ya ha finalizado.');
+        }
+
+        return view('promociones.edit', compact('promocion'));
+    }
+
     public function update(Request $request, $id) {
         $promocion = Promocion::findOrFail($id);
+
+        // BLOQUEO DE SEGURIDAD
+        if ($promocion->estado == 'finalizada') {
+            return redirect('/promociones')->with('error', 'No se puede modificar una promoción que ya ha finalizado.');
+        }
+
         $request->validate([
             'fecha_fin' => 'required|date|after_or_equal:today'],
             [
@@ -148,14 +165,8 @@ class PromocionController extends Controller
             'fecha_fin' => $request->fecha_fin
         ]);
 
-        return redirect('/promociones/' . $promocion->id)->with('success', 'Promocion actualizada correctamente');
+        return redirect('/promociones/' . $promocion->id)->with('success', 'Promoción actualizada correctamente');
     }
-
-    public function edit($id) {
-        $promocion = Promocion::with('productos')->findOrFail($id);
-        return view('promociones.edit', compact('promocion'));
-    }
-
     public function destroy($id) {
         $promocion = Promocion::findOrFail($id);
         // Quitar descuento a todos los productos, Laravel permite actualizar en lote
